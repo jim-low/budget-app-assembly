@@ -1,11 +1,16 @@
 .model small
 .stack 100
 .data
-    ; put your variables here
+    ; choices go by ascending order (1..5)
+    expenses db "Groceries"
+             db "Vehicle"
+             db "Accomodation"
+             db "Bills" ; can be further expanded
+             db "Insurance"
+    user_choice db 0
 
 .code
 main proc
-    ; your main code here
 
 main endp
 end main
