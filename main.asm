@@ -8,7 +8,7 @@
                db 13, 10, "We are not grateful and forever resentful. :D$"
     SINGLE_INPUT db ?
 
-CLS macro ; cls = clear screen
+CLEAR macro ; to clear console screen
     mov ax, 0003h
     int 10h
 endm
