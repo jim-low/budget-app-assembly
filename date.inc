@@ -2,6 +2,7 @@
     day db ?
     month db ?
     year dw ?
+    year_remainder db ?
     date_format db "00/00/0000$"
 
 .code
@@ -24,10 +25,10 @@ FormatDate:
     mov bx, 3
     call Insert8BitDate
 
-    lea dx, date_format
-    mov ah, 09h
-    int 21h
-    ret
+    lea si, year
+    mov bx, 9
+    mov cx, 4
+    call Insert16BitDate
 
 Insert8BitDate:
     mov dl, 10
@@ -39,6 +40,27 @@ Insert8BitDate:
     mov date_format[bx], al
     mov date_format[bx+1], ah
     ret
+
+Insert16BitDate:
+    mov dl, 10
+    mov ax, 0
+    mov ax, [si]
+    cmp cx, 4
+    jl ExtendZero
+    ExtendZeroEnd:
+        div dl
+        add ah, '0'
+        mov date_format[bx], ah
+        mov ah, 0
+        mov year_remainder, al
+        dec bx
+        lea si, year_remainder
+        loop Insert16BitDate
+        ret
+
+ExtendZero:
+    mov ah, 0
+    jmp ExtendZeroEnd
 
 date endp
 
