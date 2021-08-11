@@ -9,11 +9,11 @@
            db "$"
 
     main_menu db "============== MAIN MENU =============="
-       db 10, 13 "1. Record Transaction"
-       db 10, 13 "2. Display Overall Budget Usage"
-       db 10, 13 "3. Display Total Income Percentage"
-       db 10, 13 "4. Display Total Expenses Percentage"
-       db 10, 13 "======================================="
+       db 10, 13, "1. Record Transaction"
+       db 10, 13, "2. Display Overall Budget Usage"
+       db 10, 13, "3. Display Total Income Percentage"
+       db 10, 13, "4. Display Total Expenses Percentage"
+       db 10, 13, "======================================="
        db "$"
 
     expenses_list db "1. Groceries"
@@ -22,9 +22,13 @@
           db 10, 13, "4. Bills" ; can be further expanded if needed
           db 10, 13, "5. Insurance"
           db "$"
+    include DATE.INC
 
 .code
 main proc
+    mov ax, @data
+    mov ds, ax
+    call date
 
 main endp
 end main
