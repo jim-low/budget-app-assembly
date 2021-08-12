@@ -30,7 +30,7 @@ FormatDate:
     mov cx, 4
     call Insert16BitDate
 
-Insert8BitDate:
+Insert8BitData:
     mov dl, 10
     mov ax, 0
     mov al, [si]
@@ -41,7 +41,7 @@ Insert8BitDate:
     mov date_format[bx+1], ah
     ret
 
-Insert16BitDate:
+Insert16BitData:
     mov dl, 10
     mov ax, 0
     mov ax, [si]
