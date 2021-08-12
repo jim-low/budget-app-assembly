@@ -1,6 +1,8 @@
 .model small
 .stack 100
 .data
+    include DATE.INC
+    include TIME.INC
     banner db 10, 13, " _            _          _"
            db 10, 13, "| |__ _  _ __| |__ _ ___| |_   __ _ _ __ _ __"
            db 10, 13, "| '_ \ || / _` / _` / -_)  _| / _` | '_ \ '_ \"
@@ -22,8 +24,6 @@
           db 10, 13, "4. Bills" ; can be further expanded if needed
           db 10, 13, "5. Insurance"
           db "$"
-    include DATE.INC
-    include TIME.INC
 
 .code
 main proc
