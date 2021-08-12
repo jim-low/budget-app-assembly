@@ -23,6 +23,7 @@
           db 10, 13, "5. Insurance"
           db "$"
     include DATE.INC
+    include TIME.INC
 
 .code
 main proc
