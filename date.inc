@@ -32,6 +32,9 @@ FormatDate:
     mov cx, 4
     call Insert16BitData
 
+    call PrintDate
+    ret
+
 Insert8BitData:
     mov dl, 10
     mov ax, 0
@@ -60,6 +63,7 @@ Insert16BitData:
         dec bx
         lea si, year_remainder
         loop Insert16BitData
+        ret
 
 PrintDate:
     lea dx, date_format
