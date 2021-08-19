@@ -7,6 +7,7 @@
     DEPART_MSG db "Thank you for the headache-inducing assignment and the painful torture of learning the Assembly Language"
                db 13, 10, "We are not grateful and forever resentful. :D$"
     SINGLE_INPUT db ?
+    include USER-I~1.ASM
 
 CLEAR macro ; to clear console screen
     mov ax, 0003h
