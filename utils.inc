@@ -6,6 +6,16 @@ CLEAR macro ; to clear console screen
     int 10h
 endm
 
+NEW_LINE macro
+    mov dl, 0dh
+    mov ah, 02h
+    int 21h
+
+    mov dl, 0ah
+    mov ah, 02h
+    int 21h
+endm
+
 ; stackoverflow perhaps?
 ; 0 = Black
 ; 1 = Blue
