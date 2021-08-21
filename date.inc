@@ -3,7 +3,8 @@
     month db ?
     year dw ?
     year_remainder db ?
-    date_format db "00/00/0000$"
+    decoration db "+-+-+-+-+-+-+-+$"
+    date_format db "00 / 00 / 0000$"
 
 .code
 show_date proc
@@ -24,11 +25,11 @@ FormatDate:
 
     lea si, month
     lea di, date_format
-    mov bx, 3
+    mov bx, 5
     call Insert8BitData
 
     lea si, year
-    mov bx, 9
+    mov bx, 13
     mov cx, 4
     call Insert16BitData
 
@@ -66,6 +67,32 @@ Insert16BitData:
         ret
 
 PrintDate:
+    mov dh, 0
+    mov dl, 0
+    mov bh, 0
+    mov ah, 2
+    int 10h
+
+    lea dx, decoration
+    mov ah, 09h
+    int 21h
+
+    mov dh, 2
+    mov dl, 0
+    mov bh, 0
+    mov ah, 2
+    int 10h
+
+    lea dx, decoration
+    mov ah, 09h
+    int 21h
+
+    mov dh, 1
+    mov dl, 0
+    mov bh, 0
+    mov ah, 2
+    int 10h
+
     lea dx, date_format
     mov ah, 09h
     int 21h

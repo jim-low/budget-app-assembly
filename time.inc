@@ -2,7 +2,7 @@
     hours db ?
     minutes db ?
     seconds db ?
-    time_format db "00:00:00$"
+    time_format db "00 : 00 : 00$"
 
 .code
 show_time proc
@@ -22,15 +22,41 @@ FormatTime:
 
     lea si, minutes
     lea di, time_format
-    mov bx, 3
+    mov bx, 5
     call Insert8BitData
 
     lea si, seconds
     lea di, time_format
-    mov bx, 6
+    mov bx, 10
     call Insert8BitData
 
 PrintTime:
+    mov dh, 0
+    mov dl, 65
+    mov bh, 0
+    mov ah, 2
+    int 10h
+
+    lea dx, decoration
+    mov ah, 09h
+    int 21h
+
+    mov dh, 2
+    mov dl, 65
+    mov bh, 0
+    mov ah, 2
+    int 10h
+
+    lea dx, decoration
+    mov ah, 09h
+    int 21h
+
+    mov dh, 1
+    mov dl, 67
+    mov bh, 0
+    mov ah, 2
+    int 10h
+
     lea dx, time_format
     mov ah, 09h
     int 21h
