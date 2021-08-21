@@ -20,10 +20,11 @@
                   db 10, 13, "4. Bills" ; can be further expanded if needed
                   db 10, 13, "5. Insurance"
                   db "$"
-    include DATE.INC
-    include TIME.INC
+    include DATETIME.INC
 
 ; TODOS:
+; - Menus to display:
+;    - Expenses
 ; - display current budget
 ; - check with team if there are other menus
 
