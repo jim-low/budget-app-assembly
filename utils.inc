@@ -16,7 +16,7 @@ NEW_LINE macro
     int 21h
 endm
 
-; stackoverflow perhaps?
+; Color Codes (format: XY, X = background, Y = foreground)
 ; 0 = Black
 ; 1 = Blue
 ; 2 = Green
