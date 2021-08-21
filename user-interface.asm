@@ -1,17 +1,17 @@
 .data
-    banner db 10, 13, " _            _          _"
-           db 10, 13, "| |__ _  _ __| |__ _ ___| |_   __ _ _ __ _ __"
-           db 10, 13, "| '_ \ || / _` / _` / -_)  _| / _` | '_ \ '_ \"
-           db 10, 13, "|_.__/\_,_\__,_\__, \___|\__| \__,_| .__/ .__/"
-           db 10, 13, "               |___/               |_|  |_|"
+    banner db 10, 13, "                 _            _          _"
+           db 10, 13, "                | |__ _  _ __| |__ _ ___| |_   __ _ _ __ _ __"
+           db 10, 13, "                | '_ \ || / _` / _` / -_)  _| / _` | '_ \ '_ \"
+           db 10, 13, "                |_.__/\_,_\__,_\__, \___|\__| \__,_| .__/ .__/"
+           db 10, 13, "                               |___/               |_|  |_|"
            db "$"
 
-    main_menu db 10, 13, "============== MAIN MENU =============="
-              db 10, 13, "1. Record Transaction"
-              db 10, 13, "2. Display Overall Budget Usage"
-              db 10, 13, "3. Display Total Income Percentage"
-              db 10, 13, "4. Display Total Expenses Percentage"
-              db 10, 13, "======================================="
+    main_menu db 10, 13, "                  =============== MAIN MENU =============="
+              db 10, 13, "                   1. Record Transaction"
+              db 10, 13, "                   2. Display Overall Budget Usage"
+              db 10, 13, "                   3. Display Total Income Percentage"
+              db 10, 13, "                   4. Display Total Expenses Percentage"
+              db 10, 13, "                  ========================================"
               db "$"
 
     expenses_list db 10, 13, "1. Groceries"
@@ -23,8 +23,27 @@
     include DATE.INC
     include TIME.INC
 
-.code
-splash_screen proc
+; TODOS:
+; - display current budget
+; - check with team if there are other menus
 
-splash_screen endp
+.code
+main_screen proc
+    call show_time
+    call show_date
+
+    NEW_LINE
+
+    lea dx, banner
+    mov ah, 09h
+    int 21h
+
+    NEW_LINE
+
+    lea dx, main_menu
+    mov ah, 09h
+    int 21h
+    ret
+
+main_screen endp
 
