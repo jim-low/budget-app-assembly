@@ -1,30 +1,63 @@
 .data
-    banner db 10, 13, " _            _          _"
-           db 10, 13, "| |__ _  _ __| |__ _ ___| |_   __ _ _ __ _ __"
-           db 10, 13, "| '_ \ || / _` / _` / -_)  _| / _` | '_ \ '_ \"
-           db 10, 13, "|_.__/\_,_\__,_\__, \___|\__| \__,_| .__/ .__/"
-           db 10, 13, "               |___/               |_|  |_|"
+    banner db 10, 13, "                 _            _          _"
+           db 10, 13, "                | |__ _  _ __| |__ _ ___| |_   __ _ _ __ _ __"
+           db 10, 13, "                | '_ \ || / _` / _` / -_)  _| / _` | '_ \ '_ \"
+           db 10, 13, "                |_.__/\_,_\__,_\__, \___|\__| \__,_| .__/ .__/"
+           db 10, 13, "                               |___/               |_|  |_|"
            db "$"
 
-    main_menu db 10, 13, "============== MAIN MENU =============="
-              db 10, 13, "1. Record Transaction"
-              db 10, 13, "2. Display Overall Budget Usage"
-              db 10, 13, "3. Display Total Income Percentage"
-              db 10, 13, "4. Display Total Expenses Percentage"
-              db 10, 13, "======================================="
+    main_menu db 10, 13, "                  =============== MAIN MENU =============="
+              db 10, 13, "                   1. Record Transaction"
+              db 10, 13, "                   2. Display Overall Budget Usage"
+              db 10, 13, "                   3. Display Total Income Percentage"
+              db 10, 13, "                   4. Display Total Expenses Percentage"
+              db 10, 13, "                  ========================================"
               db "$"
 
-    expenses_list db 10, 13, "1. Groceries"
-                  db 10, 13, "2. Vehicle"
-                  db 10, 13, "3. Accomodation"
-                  db 10, 13, "4. Bills" ; can be further expanded if needed
-                  db 10, 13, "5. Insurance"
+    expenses_menu db 10, 13, "                      ========== Expenses ========="
+                  db 10, 13, "                       1. Groceries"
+                  db 10, 13, "                       2. Vehicle"
+                  db 10, 13, "                       3. Accomodation"
+                  db 10, 13, "                       4. Bills"
+                  db 10, 13, "                       5. Insurance"
+                  db 10, 13, "                      ============================="
                   db "$"
-    include DATE.INC
-    include TIME.INC
+
+    include DATETIME.INC
+
+; TODOS:
+; - Menus to display:
+;    - Expenses
+; - display current budget
+; - check with team if there are other menus
 
 .code
-splash_screen proc
+show_datetime proc
+    call show_time
+    call show_date
 
-splash_screen endp
+    ret
+show_datetime endp
+
+show_main_menu proc
+    lea dx, banner
+    mov ah, 09h
+    int 21h
+
+    NEW_LINE
+
+    lea dx, main_menu
+    mov ah, 09h
+    int 21h
+
+    ret
+show_main_menu endp
+
+list_expenses proc
+    lea dx, expenses_menu
+    mov ah, 09h
+    int 21h
+
+    ret
+list_expenses endp
 
