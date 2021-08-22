@@ -14,12 +14,15 @@
               db 10, 13, "                  ========================================"
               db "$"
 
-    expenses_list db 10, 13, "1. Groceries"
-                  db 10, 13, "2. Vehicle"
-                  db 10, 13, "3. Accomodation"
-                  db 10, 13, "4. Bills" ; can be further expanded if needed
-                  db 10, 13, "5. Insurance"
+    expenses_menu db 10, 13, "                      ========== Expenses ========="
+                  db 10, 13, "                       1. Groceries"
+                  db 10, 13, "                       2. Vehicle"
+                  db 10, 13, "                       3. Accomodation"
+                  db 10, 13, "                       4. Bills"
+                  db 10, 13, "                       5. Insurance"
+                  db 10, 13, "                      ============================="
                   db "$"
+
     include DATETIME.INC
 
 ; TODOS:
@@ -29,12 +32,14 @@
 ; - check with team if there are other menus
 
 .code
-main_screen proc
+show_datetime proc
     call show_time
     call show_date
 
-    NEW_LINE
+    ret
+show_datetime endp
 
+show_main_menu proc
     lea dx, banner
     mov ah, 09h
     int 21h
@@ -44,7 +49,15 @@ main_screen proc
     lea dx, main_menu
     mov ah, 09h
     int 21h
-    ret
 
-main_screen endp
+    ret
+show_main_menu endp
+
+list_expenses proc
+    lea dx, expenses_menu
+    mov ah, 09h
+    int 21h
+
+    ret
+list_expenses endp
 
