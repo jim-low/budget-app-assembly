@@ -20,8 +20,9 @@
 ## Sign Up system: (Jun Xian)
   - sign up:
       - prompt and store username
+          - numbers and uppercase letters only
       - prompt and store password (bonus part: dont print password onto screen)
   - bonus part 2: validation (this is really painful, my condolences to the person who gets this)
       - Make sure the password is at most 15 characters long
-      - Use a mix of letters (upper and lower case), numbers
+      - Use a mix of letters, numbers
 
