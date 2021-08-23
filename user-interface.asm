@@ -11,6 +11,7 @@
               db 10, 13, "                   2. Display Overall Budget Usage"
               db 10, 13, "                   3. Display Total Income Percentage"
               db 10, 13, "                   4. Display Total Expenses Percentage"
+              db 10, 13, "                   5. Exit"
               db 10, 13, "                  ========================================"
               db "$"
 
