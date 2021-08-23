@@ -43,6 +43,10 @@
 
 .code
 show_main_menu proc
+    call show_date
+    call show_time
+    call show_user_info
+
     NEW_LINE
 
     lea dx, banner
