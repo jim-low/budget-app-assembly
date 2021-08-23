@@ -33,10 +33,18 @@
 
     signup_successful_msg db 10, 13, "                        -- Successfully Signed Up! --$"
 
+    user_decoration db " +-+-+-+-+-+-+-+-+-+-+-+-+-++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+$"
+    username_format db "Username: $"
+    username db "Jim$"
+    balance_format db "Balance: RM $"
+    balance db "0.005$"
+
     include DATETIME.INC
 
 .code
 show_main_menu proc
+    NEW_LINE
+
     lea dx, banner
     mov ah, 09h
     int 21h
@@ -56,6 +64,57 @@ show_signup proc
     int 21h
     ret
 show_signup endp
+
+show_user_info proc
+    mov dh, 4
+    mov dl, 0
+    mov bh, 0
+    mov ah, 2
+    int 10h
+
+    lea dx, user_decoration
+    mov ah, 09h
+    int 21h
+
+    NEW_LINE
+
+    mov dh, 5
+    mov dl, 32
+    mov bh, 0
+    mov ah, 2
+    int 10h
+
+    lea dx, username_format
+    mov ah, 09h
+    int 21h
+
+    lea dx, username
+    int 21h
+
+    NEW_LINE
+
+    mov dh, 6
+    mov dl, 30
+    mov bh, 0
+    mov ah, 2
+    int 10h
+
+    lea dx, balance_format
+    mov ah, 09h
+    int 21h
+
+    lea dx, balance
+    mov ah, 09h
+    int 21h
+
+    NEW_LINE
+
+    lea dx, user_decoration
+    mov ah, 09h
+    int 21h
+    ret
+
+show_user_info endp
 
 show_successful_signup proc
     CHANGE_COLOR 02h , signup_successful_msg
