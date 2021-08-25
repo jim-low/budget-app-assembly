@@ -67,6 +67,11 @@ show_signup proc
     ret
 show_signup endp
 
+show_successful_signup proc
+    CHANGE_COLOR 02h , signup_successful_msg
+    ret
+show_successful_signup endp
+
 show_user_info proc ; si = username, di = balance
     mov dh, 4
     mov dl, 0
@@ -117,11 +122,6 @@ show_user_info proc ; si = username, di = balance
     ret
 
 show_user_info endp
-
-show_successful_signup proc
-    CHANGE_COLOR 02h , signup_successful_msg
-    ret
-show_successful_signup endp
 
 list_expenses proc
     lea dx, expenses_menu
