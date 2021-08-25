@@ -24,12 +24,11 @@
                   db 10, 13, "                      ============================="
                   db "$"
 
-    signup_banner db 10, 13, "   ____            _     _                 _                             _"
-                  db 10, 13, "  |  _ \ ___  __ _(_)___| |_ ___ _ __     / \   ___ ___ ___  _   _ _ __ | |_"
-                  db 10, 13, "  | |_) / _ \/ _` | / __| __/ _ \ '__|   / _ \ / __/ __/ _ \| | | | '_ \| __|"
-                  db 10, 13, "  |  _ <  __/ (_| | \__ \ ||  __/ |     / ___ \ (_| (_| (_) | |_| | | | | |_"
-                  db 10, 13, "  |_| \_\___|\__, |_|___/\__\___|_|    /_/   \_\___\___\___/ \__,_|_| |_|\__|"
-                  db 10, 13, "             |___/"
+    signup_banner db 10, 13, "          ___          _    _               _                      _"
+                  db 10, 13, "         | _ \___ __ _(_)__| |_ ___ _ _    /_\  __ __ ___ _  _ _ _| |_"
+                  db 10, 13, "         |   / -_) _` | (_-<  _/ -_) '_|  / _ \/ _/ _/ _ \ || | ' \  _|"
+                  db 10, 13, "         |_|_\___\__, |_/__/\__\___|_|   /_/ \_\__\__\___/\_,_|_||_\__|"
+                  db 10, 13, "                 |___/"
                   db "$"
 
     signup_successful_msg db 10, 13, "                        -- Successfully Signed Up! --$"
@@ -68,7 +67,12 @@ show_signup proc
     ret
 show_signup endp
 
-show_user_info proc
+show_successful_signup proc
+    CHANGE_COLOR 02h , signup_successful_msg
+    ret
+show_successful_signup endp
+
+show_user_info proc ; si = username, di = balance
     mov dh, 4
     mov dl, 0
     mov bh, 0
@@ -91,7 +95,7 @@ show_user_info proc
     mov ah, 09h
     int 21h
 
-    lea dx, username
+    lea dx, [si]
     int 21h
 
     NEW_LINE
@@ -106,7 +110,7 @@ show_user_info proc
     mov ah, 09h
     int 21h
 
-    lea dx, balance
+    lea dx, [di]
     mov ah, 09h
     int 21h
 
@@ -118,11 +122,6 @@ show_user_info proc
     ret
 
 show_user_info endp
-
-show_successful_signup proc
-    CHANGE_COLOR 02h , signup_successful_msg
-    ret
-show_successful_signup endp
 
 list_expenses proc
     lea dx, expenses_menu
