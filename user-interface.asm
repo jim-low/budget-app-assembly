@@ -68,7 +68,7 @@ show_signup proc
     ret
 show_signup endp
 
-show_user_info proc
+show_user_info proc ; si = username, di = balance
     mov dh, 4
     mov dl, 0
     mov bh, 0
@@ -91,7 +91,7 @@ show_user_info proc
     mov ah, 09h
     int 21h
 
-    lea dx, username
+    lea dx, [si]
     int 21h
 
     NEW_LINE
@@ -106,7 +106,7 @@ show_user_info proc
     mov ah, 09h
     int 21h
 
-    lea dx, balance
+    lea dx, [di]
     mov ah, 09h
     int 21h
 
