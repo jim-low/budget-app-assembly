@@ -1,8 +1,8 @@
 .model small
 .stack 100
 .data
-    DEPART_MSG db "Thank you for the headache-inducing assignment and the painful torture of learning the Assembly Language"
-               db 13, 10, "We are not grateful and forever resentful. :D$"
+    depart_msg db "thank you for the headache-inducing assignment and the painful torture of learning the assembly language"
+               db 13, 10, "we are not grateful and forever resentful. :d$"
     include utils.inc
     include formulas.asm
     include login.asm
@@ -14,7 +14,7 @@ main proc
     mov ax, @data
     mov ds, ax
 
-EndProgram:
+endprogram:
     mov ah, 4ch
     int 21h
 

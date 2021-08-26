@@ -1,203 +1,210 @@
-.model small
-.stack 100h
-
-begin macro
-mov ax,@data
-mov ds,ax
-endm
-
-printStr macro aString
-mov ah,9h
-lea dx, aString
-int 21h
-endm
-
-;readch macro aValue
-;mov ah,1h
-;int 21h
-;mov aValue,al
-;endm
-
 .data
-;------------------------------------Sign-------------------------------------------------------------------
-	signUp db 13,10,"        +++++++++++++++   "
-               db 13,10,"        +   SIGN UP   +   "
-               db 13,10,"        +++++++++++++++   $"
-
-;-------------------------------------User name-------------------------------------------------------------
-	inputMsg db "Please enter and create your user name :  $"
-	errorMsg db "Incorect userinput (Capital letters and numbers only) $"
-	userName db 30,?,32 dup("$")
-	userNameHasNumber db 0
-	userNameHasCapitalLetter db 0
-	validUserName db 1
-	userNameComfirmationMsg db "Your user name is comfirmed >>> $"
-	nl db 10,13,"$"
-;-------------------------------------User name-------------------------------------------------------------
+;-------------------------------------user name-------------------------------------------------------------
+    inputMsg db "please enter and create your user name :  $"
+    errorMsg db "incorect userinput (capital letters and numbers only) $"
+    username db 30,?,32 dup("$")
+    usernameHasNumber db 0
+    usernameHasCapitalLetter db 0
+    validUsername db 1
+    usernameConfirmationMsg db "your user name is comfirmed >>> $"
+;-------------------------------------user name-------------------------------------------------------------
 ;-------------------------------------Password--------------------------------------------------------------
-	inputPsMsg db "Please enter your desired password [length = 10] : $"
-	comfirmPsMsg db "Please comfirm your password : $"
-	finalPsMsg db "Thank you for your password comfirmation : $"
-	inputPs db 10,?,10 dup("$")
-	errorPsMsg db  10,13,"Your password is not in the correct form"
-        	   db  10,13,"Possible error:"
-		   db  10,13,"              1) Not in 10 characters form"
-	           db  10,13,"              2) Password must contain (uppercase,lowercase,number characters)"
-	           db  10,13,"              3) Only characters metioned in 2) is acceptable$"
-	nums db 0
-	lowerLetters db 0
-	upperLetters db 0
-;-------------------------------------Password-------------------------------------------------------------
-.code
-main proc
-	begin
-	mov ax,0
-	printStr signUp
+    inputPsMsg db "please enter your desired password [length = 10] : $"
+    confirmPsMsg db "please comfirm your password : $"
+    finalPsMsg db "thank you for your password comfirmation : $"
+    inputPs db 10,?,10 dup("$")
+    errorPsMsg db  10,13,"your password is not in the correct form"
+               db  10,13,"possible error:"
+               db  10,13,"              1) not in 10 characters form"
+               db  10,13,"              2) password must contain (uppercase,lowercase,number characters)"
+               db  10,13,"              3) only characters metioned in 2) is acceptable$"
+    nums db 0
+    lowerLetters db 0
+    upperLetters db 0
+;-------------------------------------password-------------------------------------------------------------
 
-;------------------USER NAME-------------------------------------------------------------------------------
+.code
+signup proc
+
+    lea si, signup
+    mov dl, stringFlag
+    call display
+
+
+;------------------user name-------------------------------------------------------------------------------
 ;-----enter user name message
-userMsg:
-	printStr nl
-	printStr inputMsg
+UserMsg:
+    NEW_LINE
+
+    lea si, inputMsg
+    mov dl, stringFlag
+    call display
+
 
 ;----get user input
-inputGetter:
-	lea dx,userName
-	mov ah,0Ah
-	int 21h
-	printStr nl
+InputGetter:
+    lea dx,username
+    mov ah,0ah
+    int 21h
+    NEW_LINE
 
 ;-----check for strings and numbers
-	mov bx,0
-validateUsername:
-	mov dl,userName[bx+2]
-	cmp dl,0dh
-	je finalUserInput
-	validateNumbers:
-		cmp dl,'0'
-		jl error
-		jmp compareWithinNumbers
+    mov bx,0
 
-	validateCapitalLetter:
-		cmp dl,'A'
-		jl error
-		jmp compareWithinLetters
+ValidateUsername:
+    mov dl,username[bx+2]
+    cmp dl,0dh
+    je FinalUserInput
+ValidateNumbers:
+    cmp dl,'0'
+    jl Error
+    jmp CompareWithinNumbers
 
-	endValidate:
-		inc bx
-		jmp validateUsername
+ValidateCapitalLetter:
+    cmp dl,'a'
+    jl Error
+    jmp CompareWithinLetters
 
-compareWithinNumbers:
-	cmp dl,'9'
-	jg validateCapitalLetter
+EndValidate:
+    inc bx
+    jmp ValidateUsername
 
-compareWithinLetters:
-	cmp dl,'Z'
-	jg error
-	jmp endValidate
+CompareWithinNumbers:
+    cmp dl,'9'
+    jg ValidateCapitalLetter
+
+CompareWithinLetters:
+    cmp dl,'z'
+    jg Error
+    jmp EndValidate
 ;----------------------------------------
 
-error:
-	printStr nl
-	printStr errorMsg
-	jmp userMsg;
+Error:
+    NEW_LINE
 
-finalUserInput:
-	printStr nl
-	printStr userNameComfirmationMsg
-	printStr userName+2
-	jmp password
+    lea si, errorMsg
+    mov dl, stringFlag
+    call display
 
-;------------------USER NAME---------------------------------------------------------------------------
-;------------------PASSWORD----------------------------------------------------------------------------
-password:
-	printStr nl
-	printStr inputPsMsg
+    jmp UserMsg;
 
-	;-get input
-	mov cx,15
-	mov si,0
+FinalUserInput:
+    NEW_LINE
 
-getInputPs:
-	mov ah,07h
-	int 21h
-	mov inputPs[si],al
-	inc si
+    lea si, usernameConfirmationMsg
+    mov dl, stringFlag
+    call display
 
-	mov ah,02h
-	mov dl,'@'
-	int 21h
-	loop getInputPs
-	printStr nl
 
-	mov si,0
+    lea si, username+2
+    mov dl, stringFlag
+    call display
+
+    jmp Password
+
+;------------------user name---------------------------------------------------------------------------
+;------------------password----------------------------------------------------------------------------
+Password:
+    NEW_LINE
+
+    lea si, inputPsMsg
+    mov dl, stringFlag
+    call display
+
+
+;-get input
+    mov cx,15
+    mov si,0
+
+GetInputPs:
+    mov ah,07h
+    int 21h
+    mov inputPs[si],al
+    inc si
+
+    mov ah,02h
+    mov dl,'@'
+    int 21h
+    loop GetInputPs
+    NEW_LINE
+
+    mov si,0
 ;-----------password validation
-chkStrlength:
-	cmp si,15
-	je checkNumIntAndLetters
-	jne chkNum
+ChkStrLength:
+    cmp si,15
+    je CheckNumAndLetters
+    jne ChkNum
 
-chkNum:
-	cmp inputPs[si],48
-	jb errorPs
+ChkNum:
+    cmp inputPs[si],48
+    jb ErrorPs
 
-	cmp inputPs[si],57
-	jbe addNum
+    cmp inputPs[si],57
+    jbe AddNum
 
-chkLetters:
-	cmp inputPs[si],'A'
-	jb errorPs
+ChkLetters:
+    cmp inputPs[si],'a'
+    jb ErrorPs
 
-	cmp inputPs[si],'Z'
-	jbe nextPs
+    cmp inputPs[si],'z'
+    jbe NextPs
 
-	cmp inputPs[si],'a'
-	jb errorPs
+    cmp inputPs[si],'a'
+    jb ErrorPs
 
-	cmp inputPs[si],'z'
-	jbe nextPs
-	ja errorPs
+    cmp inputPs[si],'z'
+    jbe NextPs
+    ja ErrorPs
 
-addNum:
-	inc nums
-	jmp nextPs
+AddNum:
+    inc nums
+    jmp NextPs
 
-lowLetters:
-	inc lowerLetters
-	jmp nextPs
+LowLetters:
+    inc lowerLetters
+    jmp NextPs
 
-upLetters:
-	inc upperLetters
-	jmp nextPs
+UpLetters:
+    inc upperLetters
+    jmp NextPs
 
-checkNumIntAndLetters:
-	cmp nums,0
-	jne password
-	cmp lowerLetters,0
-	jne password
-	cmp upperLetters,0
-	jne password
-	jmp finalMsg
+CheckNumAndLetters:
+    cmp nums,0
+    jne Password
+    cmp lowerLetters,0
+    jne Password
+    cmp upperLetters,0
+    jne Password
+    jmp FinalMsg
 
-nextPs:
-	inc si
-	jmp chkStrlength
+NextPs:
+    inc si
+    jmp ChkStrLength
 
 
-errorPs:
-	printStr nl
-	printStr errorPsMsg
-	printStr nl
-	jmp password
+ErrorPs:
+    NEW_LINE
 
-finalMsg:
-	printStr nl
-	printStr finalPsMsg
-	printStr inputPs
-	jmp exit
+    lea si, errorPsMsg
+    mov dl, stringFlag
+    call display
 
-exit:
-	mov ah,04ch
-	int 21h
-main endp
-end main
+    NEW_LINE
+    jmp Password
+
+FinalMsg:
+    NEW_LINE
+
+    lea si, finalPsMsg
+    mov dl, stringFlag
+    call display
+
+
+    lea si, inputPs
+    mov dl, stringFlag
+    call display
+
+    jmp exit
+
+signup endp
+

@@ -6,7 +6,7 @@
             db 10, 13, "                              |___/                |_|  |_|"
             db "$"
 
-    main_menu db 10, 13, "                  =============== MAIN MENU =============="
+    mainMenu db 10, 13, "                  =============== main menu =============="
               db 10, 13, "                    1. Record Transaction"
               db 10, 13, "                    2. Display Total Income Percentage"
               db 10, 13, "                    3. Display Total Expenses Percentage"
@@ -14,7 +14,7 @@
               db 10, 13, "                  ========================================"
               db "$"
 
-    expenses_menu db 10, 13, "                      ========== Expenses ========="
+    expensesMenu db 10, 13, "                      ========== expenses ========="
                   db 10, 13, "                        1. Groceries"
                   db 10, 13, "                        2. Vehicle"
                   db 10, 13, "                        3. Accomodation"
@@ -23,63 +23,63 @@
                   db 10, 13, "                      ============================="
                   db "$"
 
-    signup_banner db 10, 13, "          ___          _    _               _                      _"
+    signupBanner db 10, 13, "          ___          _    _               _                      _"
                   db 10, 13, "         | _ \___ __ _(_)__| |_ ___ _ _    /_\  __ __ ___ _  _ _ _| |_"
                   db 10, 13, "         |   / -_) _` | (_-<  _/ -_) '_|  / _ \/ _/ _/ _ \ || | ' \  _|"
                   db 10, 13, "         |_|_\___\__, |_/__/\__\___|_|   /_/ \_\__\__\___/\_,_|_||_\__|"
                   db 10, 13, "                 |___/"
                   db "$"
 
-    signup_successful_msg db 10, 13, "                        -- Successfully Signed Up! --$"
+    signupSuccessfulMsg db 10, 13, "                        -- Successfully Signed Up! --$"
 
-    user_decoration db " +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+$"
-    username_format db "Username: $"
-    balance_format db "Balance: RM$"
+    userDecoration db " +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+$"
+    usernameFormat db "Username: $"
+    balanceFormat db "Balance: RM$"
 
-    include DATETIME.INC
+    include datetime.inc
 
 .code
-show_main_menu proc
-    call show_date
-    call show_time
-    call show_user_info
+ShowMainMenu proc
+    call showDate
+    call showTime
+    call ShowUserInfo
 
     NEW_LINE
 
     lea si, banner
-    mov dl, STRING_FLAG
+    mov dl, stringFlag
     call display
 
     NEW_LINE
 
-    lea si, main_menu
-    mov dl, STRING_FLAG
+    lea si, mainMenu
+    mov dl, stringFlag
     call display
 
     ret
-show_main_menu endp
+ShowMainMenu endp
 
-show_signup proc
-    lea si, signup_banner
-    mov dl, STRING_FLAG
+ShowSignup proc
+    lea si, signupBanner
+    mov dl, stringFlag
     call display
     ret
-show_signup endp
+ShowSignup endp
 
-show_successful_signup proc
-    CHANGE_COLOR 02h , signup_successful_msg
+ShowSuccessfulSignup proc
+    change_color 02h , signupSuccessfulMsg
     ret
-show_successful_signup endp
+ShowSuccessfulSignup endp
 
-show_user_info proc
+ShowUserInfo proc
     mov dh, 4
     mov dl, 0
     mov bh, 0
     mov ah, 2
     int 10h
 
-    lea si, user_decoration
-    mov dl, STRING_FLAG
+    lea si, userDecoration
+    mov dl, stringFlag
     call display
 
     NEW_LINE
@@ -90,12 +90,12 @@ show_user_info proc
     mov ah, 2
     int 10h
 
-    lea si, username_format
-    mov dl, STRING_FLAG
+    lea si, usernameFormat
+    mov dl, stringFlag
     call display
 
     lea si, username
-    mov dl, STRING_FLAG
+    mov dl, stringFlag
     call display
 
     NEW_LINE
@@ -106,28 +106,28 @@ show_user_info proc
     mov ah, 2
     int 10h
 
-    lea si, balance_format
-    mov dl, STRING_FLAG
+    lea si, balanceFormat
+    mov dl, stringFlag
     call display
 
     lea si, balance
-    mov dl, DIGITS_FLAG
+    mov dl, digitsFlag
     call display
 
     NEW_LINE
 
-    lea si, user_decoration
-    mov dl, STRING_FLAG
+    lea si, userDecoration
+    mov dl, stringFlag
     call display
     ret
 
-show_user_info endp
+ShowUserInfo endp
 
-list_expenses proc
-    lea si, expenses_menu
-    mov dl, STRING_FLAG
+ListExpenses proc
+    lea si, expensesMenu
+    mov dl, stringFlag
     call display
 
     ret
-list_expenses endp
+ListExpenses endp
 

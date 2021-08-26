@@ -2,18 +2,18 @@
     day db ?
     month db ?
     year dw ?
-    year_remainder db ?
-    date_decoration db "+-+-+-+-+-+-+-+-+$"
-    date_format db "00 / 00 / 0000$"
+    yearRemainder db ?
+    dateDecoration db "+-+-+-+-+-+-+-+-+$"
+    dateFormat db "00 / 00 / 0000$"
 
     hours db ?
     minutes db ?
     seconds db ?
-    time_decoration db "+-+-+-+-+-+$"
-    time_format db "00 : 00$"
+    timeDecoration db "+-+-+-+-+-+$"
+    timeFormat db "00 : 00$"
 
 .code
-show_date proc
+ShowDate proc
 GetDate:
     mov ah, 2ah
     int 21h
@@ -25,12 +25,12 @@ GetDate:
 
 FormatDate:
     lea si, day
-    lea di, date_format
+    lea di, dateFormat
     mov bx, 0
     call Insert8BitData
 
     lea si, month
-    lea di, date_format
+    lea di, dateFormat
     mov bx, 5
     call Insert8BitData
 
@@ -64,11 +64,11 @@ Insert16BitData:
     ExtendZeroEnd:
         div dl
         add ah, '0'
-        mov date_format[bx], ah
+        mov dateFormat[bx], ah
         mov ah, 0
-        mov year_remainder, al
+        mov yearRemainder, al
         dec bx
-        lea si, year_remainder
+        lea si, yearRemainder
         loop Insert16BitData
         ret
 
@@ -79,8 +79,8 @@ PrintDate:
     mov ah, 2
     int 10h
 
-    lea si, date_decoration
-    mov dl, STRING_FLAG
+    lea si, dateDecoration
+    mov dl, stringFlag
     call display
 
     mov dh, 2
@@ -89,8 +89,8 @@ PrintDate:
     mov ah, 2
     int 10h
 
-    lea si, date_decoration
-    mov dl, STRING_FLAG
+    lea si, dateDecoration
+    mov dl, stringFlag
     call display
 
     mov dh, 1
@@ -99,8 +99,8 @@ PrintDate:
     mov ah, 2
     int 10h
 
-    lea si, date_format
-    mov dl, STRING_FLAG
+    lea si, dateFormat
+    mov dl, stringFlag
     call display
     ret
 
@@ -108,9 +108,9 @@ ExtendZero:
     mov ah, 0
     jmp ExtendZeroEnd
 
-show_date endp
+ShowDate endp
 
-show_time proc
+ShowTime proc
 GetTime:
     mov ah, 2ch
     int 21h
@@ -121,12 +121,12 @@ GetTime:
 
 FormatTime:
     lea si, hours
-    lea di, time_format
+    lea di, timeFormat
     mov bx, 0
     call Insert8BitData
 
     lea si, minutes
-    lea di, time_format
+    lea di, timeFormat
     mov bx, 5
     call Insert8BitData
 
@@ -137,8 +137,8 @@ PrintTime:
     mov ah, 2
     int 10h
 
-    lea si, time_decoration
-    mov dl, STRING_FLAG
+    lea si, timeDecoration
+    mov dl, stringFlag
     call display
 
     mov dh, 2
@@ -147,8 +147,8 @@ PrintTime:
     mov ah, 2
     int 10h
 
-    lea si, time_decoration
-    mov dl, STRING_FLAG
+    lea si, timeDecoration
+    mov dl, stringFlag
     call display
 
     mov dh, 1
@@ -157,10 +157,10 @@ PrintTime:
     mov ah, 2
     int 10h
 
-    lea si, time_format
-    mov dl, STRING_FLAG
+    lea si, timeFormat
+    mov dl, stringFlag
     call display
     ret
 
-show_time endp
+ShowTime endp
 
