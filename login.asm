@@ -1,11 +1,3 @@
-<<<<<<< Updated upstream
-.data
-    ; put your variables here
-
-.code
-    ; all the best - Jim
-
-=======
   .model small
   .stack 100
   .data
@@ -13,16 +5,17 @@
 		LOGIN_BANNER DB 0DH,0AH,'           _______________________________ '
 					 DB 0DH,0AH,'          (                               )'
 					 DB 0DH,0AH,'          (          - LOGIN -            )'
-					 DB 0DH,0AH,'          (_______________________________)'
-					 DB 0DH,0AH,'                  USERNAME : $'
+					 DB 0DH,0AH,'          (_______________________________)$'
+		STR1 DB 0DH,0AH,0DH,0AH,'                  USERNAME : $'
 		STR2 DB 0DH,0AH,'                  PASSWORD : $'
-		USERNAME DB 'budget'
+		USERNAME DB 'budget$'
 		PASSWORD DB 'Cheese12'
 		LONG EQU ($-PASSWORD) ;EQU=only tells the assembler to substitute a value for a symbol
 		InputName DB 10, ?, 12 DUP ('$')		  
 		InputPSW  DB 10 DUP ('$')
-		Invalid DB 0DH,0AH,0DH,0AH,'                 ! FAILED TO LOG IN ! $'
-		SUCCESS DB 0DH,0AH,0DH,0AH,'                - SUCCESSFULLY LOG IN - $'             
+		FAILED DB 0DH,0AH,0DH,0AH,'                 ! FAILED TO LOG IN ! ',0DH,0AH,'$'
+		SUCCESS DB 0DH,0AH,0DH,0AH,'                - SUCCESSFULLY LOG IN - $'   
+		EXCCEDED DB 0DH,0AH,0DH,0AH,'  - FAILURE OVER 5, PLEASE CONTACT ADMIN FOR FURTHER HELP -$'
 		NL   DB 0DH,0AH,"$"
 		SINGLE_INPUT DB ?
 		COUNT DB 0
@@ -43,56 +36,47 @@
 		MOV AH, 09H
 		LEA DX, LOGIN_BANNER
 		INT 21H
+	
+	START:
+		CMP COUNT, 5
+		JE EXCEED
 		
-	;START:
-	;	CMP COUNT, 5
-	;	JE Input
-	;	JMP EXIT
-
-		;GET USER INPUT
-	Input:
+	INPUT:
+		;DISPLAY STR1
+		MOV AH, 09H
+		LEA DX, STR1
+		INT 21H
+		
+		;GET USERNAME
 		LEA DX, InputName
 		MOV AH, 0AH
 		INT 21H
 		
-		MOV AX, 0
 		MOV BX, 0
-		ADD InputName, 2
-		
-;	CHECK_CARRIAGE:
-;		MOV AL, InputName[BX]
-;		CMP AL, 0DH ;0DH = CARRIAGE RETURN
-;		JE REPLACE_CARRIAGE
-		
 	CHECK_NAME:
-		MOV AL, InputName[BX]
-		CMP AL, USERNAME[BX]
+		MOV AL, [InputName+2+BX]
 		CMP AL, 0DH
-		JNE FAIL
 		JE PSW
+		CMP AL, [USERNAME+BX]
+		JNE FAIL
 		INC BX
-		;JMP CHECK_CARRIAGE
-		LOOP CHECK_NAME
+		JMP CHECK_NAME
 		
-;	REPLACE_CARRIAGE:
-;		MOV AL, '$'
-;		MOV InputName[SI], AL
-;		JMP CHECK_NAME
+	EXCEED:
+		MOV AH, 09H
+		LEA DX, EXCCEDED
+		INT 21H
+		JMP EXIT
 		
 		;DISPLAY ENTER PSW
 	PSW:
-		;NEXTLINE
-		MOV AH, 09H	
-		LEA DX, NL		
-		INT 21H
-		
 		MOV AH,09H
 		LEA DX,STR2
 		INT 21H
 		
 		MOV SI, 00
 		;DISPLAY *
-	L2:
+	CHANGE:
 		MOV AH, 07H ;CHAR INPUT WITHOUT ECHO, BREAK ARE CHECK 
 		INT 21H
 		CMP AL, 0DH ;0DH = CR
@@ -104,11 +88,11 @@
 		MOV AH, 02H ;WRITE CHAR TO STANDARD OUTPUT 
 		INT 21H
 		INC SI
-		JMP L2
+		JMP CHANGE
 		
 	BACKSPACE:
 		CMP SI, 0
-		JE L2
+		JE CHANGE
 		DEC SI
 		MOV [InputPSW+SI], 0
 		MOV DL, 08H 
@@ -120,7 +104,7 @@
 		MOV DL, 08H 
 		MOV AH, 02H
 		INT 21H
-		JMP L2
+		JMP CHANGE
 	
 	SET:
 		MOV BX,00
@@ -132,18 +116,17 @@
 		JNE FAIL
 		INC BX
 		LOOP CHECK_PSW
-		LEA DX, SUCCESS
 		MOV AH, 09H
+		LEA DX, SUCCESS
 		INT 21H
 		JMP EXIT
 	
 	FAIL:
 		MOV AH, 09H
-		LEA DX, Invalid
+		LEA DX, FAILED
 		INT 21H
 		INC COUNT 
-		;JMP START
-		JMP EXIT
+		JMP START
 	
 	EXIT:
 		MOV AX, 4C00H
@@ -175,4 +158,3 @@ SingleInput:
 	prompt endp
    end main
    
->>>>>>> Stashed changes
