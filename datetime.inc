@@ -79,9 +79,9 @@ PrintDate:
     mov ah, 2
     int 10h
 
-    lea dx, date_decoration
-    mov ah, 09h
-    int 21h
+    lea si, date_decoration
+    mov dl, STRING_FLAG
+    call display
 
     mov dh, 2
     mov dl, 0
@@ -89,9 +89,9 @@ PrintDate:
     mov ah, 2
     int 10h
 
-    lea dx, date_decoration
-    mov ah, 09h
-    int 21h
+    lea si, date_decoration
+    mov dl, STRING_FLAG
+    call display
 
     mov dh, 1
     mov dl, 1
@@ -99,9 +99,9 @@ PrintDate:
     mov ah, 2
     int 10h
 
-    lea dx, date_format
-    mov ah, 09h
-    int 21h
+    lea si, date_format
+    mov dl, STRING_FLAG
+    call display
     ret
 
 ExtendZero:
@@ -142,9 +142,9 @@ PrintTime:
     mov ah, 2
     int 10h
 
-    lea dx, time_decoration
-    mov ah, 09h
-    int 21h
+    lea si, time_decoration
+    mov dl, STRING_FLAG
+    call display
 
     mov dh, 2
     mov dl, 65
@@ -152,9 +152,9 @@ PrintTime:
     mov ah, 2
     int 10h
 
-    lea dx, time_decoration
-    mov ah, 09h
-    int 21h
+    lea si, time_decoration
+    mov dl, STRING_FLAG
+    call display
 
     mov dh, 1
     mov dl, 67
@@ -162,9 +162,9 @@ PrintTime:
     mov ah, 2
     int 10h
 
-    lea dx, time_format
-    mov ah, 09h
-    int 21h
+    lea si, time_format
+    mov dl, STRING_FLAG
+    call display
     ret
 
 show_time endp

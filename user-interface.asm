@@ -50,23 +50,23 @@ show_main_menu proc
 
     NEW_LINE
 
-    lea dx, banner
-    mov ah, 09h
-    int 21h
+    lea si, banner
+    mov dl, STRING_FLAG
+    call display
 
     NEW_LINE
 
-    lea dx, main_menu
-    mov ah, 09h
-    int 21h
+    lea si, main_menu
+    mov dl, STRING_FLAG
+    call display
 
     ret
 show_main_menu endp
 
 show_signup proc
-    lea dx, signup_banner
-    mov ah, 09h
-    int 21h
+    lea si, signup_banner
+    mov dl, STRING_FLAG
+    call display
     ret
 show_signup endp
 
@@ -82,9 +82,9 @@ show_user_info proc ; si = username, di = balance
     mov ah, 2
     int 10h
 
-    lea dx, user_decoration
-    mov ah, 09h
-    int 21h
+    lea si, user_decoration
+    mov dl, STRING_FLAG
+    call display
 
     NEW_LINE
 
@@ -94,12 +94,13 @@ show_user_info proc ; si = username, di = balance
     mov ah, 2
     int 10h
 
-    lea dx, username_format
-    mov ah, 09h
-    int 21h
+    lea si, username_format
+    mov dl, STRING_FLAG
+    call display
 
-    lea dx, [si]
-    int 21h
+    lea si, username
+    mov dl, STRING_FLAG
+    call display
 
     NEW_LINE
 
@@ -109,27 +110,27 @@ show_user_info proc ; si = username, di = balance
     mov ah, 2
     int 10h
 
-    lea dx, balance_format
-    mov ah, 09h
-    int 21h
+    lea si, balance_format
+    mov dl, STRING_FLAG
+    call display
 
-    lea si, [di]
+    lea si, balance
     mov dl, DIGITS_FLAG
     call display
 
     NEW_LINE
 
-    lea dx, user_decoration
-    mov ah, 09h
-    int 21h
+    lea si, user_decoration
+    mov dl, STRING_FLAG
+    call display
     ret
 
 show_user_info endp
 
 list_expenses proc
-    lea dx, expenses_menu
-    mov ah, 09h
-    int 21h
+    lea si, expenses_menu
+    mov dl, STRING_FLAG
+    call display
 
     ret
 list_expenses endp
