@@ -195,11 +195,9 @@ finalMsg:
 	printStr finalPsMsg
 	printStr inputPs
 	jmp exit
-;------------------PASSWORD-----------------------------------------------------------------------------------
 
 exit:
 	mov ah,04ch
 	int 21h
 main endp
 end main
-
