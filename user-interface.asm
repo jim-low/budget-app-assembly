@@ -43,9 +43,6 @@
 show_main_menu proc
     call show_date
     call show_time
-
-    lea si, username
-    lea di, balance
     call show_user_info
 
     NEW_LINE
@@ -75,7 +72,7 @@ show_successful_signup proc
     ret
 show_successful_signup endp
 
-show_user_info proc ; si = username, di = balance
+show_user_info proc
     mov dh, 4
     mov dl, 0
     mov bh, 0
