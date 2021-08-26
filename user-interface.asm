@@ -7,34 +7,32 @@
             db "$"
 
     main_menu db 10, 13, "                  =============== MAIN MENU =============="
-              db 10, 13, "                   1. Record Transaction"
-              db 10, 13, "                   2. Display Overall Budget Usage"
-              db 10, 13, "                   3. Display Total Income Percentage"
-              db 10, 13, "                   4. Display Total Expenses Percentage"
-              db 10, 13, "                   5. Exit"
+              db 10, 13, "                    1. Record Transaction"
+              db 10, 13, "                    2. Display Total Income Percentage"
+              db 10, 13, "                    3. Display Total Expenses Percentage"
+              db 10, 13, "                    4. Exit"
               db 10, 13, "                  ========================================"
               db "$"
 
     expenses_menu db 10, 13, "                      ========== Expenses ========="
-                  db 10, 13, "                       1. Groceries"
-                  db 10, 13, "                       2. Vehicle"
-                  db 10, 13, "                       3. Accomodation"
-                  db 10, 13, "                       4. Bills"
-                  db 10, 13, "                       5. Insurance"
+                  db 10, 13, "                        1. Groceries"
+                  db 10, 13, "                        2. Vehicle"
+                  db 10, 13, "                        3. Accomodation"
+                  db 10, 13, "                        4. Bills"
+                  db 10, 13, "                        5. Insurance"
                   db 10, 13, "                      ============================="
                   db "$"
 
-    signup_banner db 10, 13, "   ____            _     _                 _                             _"
-                  db 10, 13, "  |  _ \ ___  __ _(_)___| |_ ___ _ __     / \   ___ ___ ___  _   _ _ __ | |_"
-                  db 10, 13, "  | |_) / _ \/ _` | / __| __/ _ \ '__|   / _ \ / __/ __/ _ \| | | | '_ \| __|"
-                  db 10, 13, "  |  _ <  __/ (_| | \__ \ ||  __/ |     / ___ \ (_| (_| (_) | |_| | | | | |_"
-                  db 10, 13, "  |_| \_\___|\__, |_|___/\__\___|_|    /_/   \_\___\___\___/ \__,_|_| |_|\__|"
-                  db 10, 13, "             |___/"
+    signup_banner db 10, 13, "          ___          _    _               _                      _"
+                  db 10, 13, "         | _ \___ __ _(_)__| |_ ___ _ _    /_\  __ __ ___ _  _ _ _| |_"
+                  db 10, 13, "         |   / -_) _` | (_-<  _/ -_) '_|  / _ \/ _/ _/ _ \ || | ' \  _|"
+                  db 10, 13, "         |_|_\___\__, |_/__/\__\___|_|   /_/ \_\__\__\___/\_,_|_||_\__|"
+                  db 10, 13, "                 |___/"
                   db "$"
 
     signup_successful_msg db 10, 13, "                        -- Successfully Signed Up! --$"
 
-    user_decoration db " +-+-+-+-+-+-+-+-+-+-+-+-+-++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+$"
+    user_decoration db " +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+$"
     username_format db "Username: $"
     balance_format db "Balance: RM$"
 
@@ -48,25 +46,30 @@ show_main_menu proc
 
     NEW_LINE
 
-    lea dx, banner
-    mov ah, 09h
-    int 21h
+    lea si, banner
+    mov dl, STRING_FLAG
+    call display
 
     NEW_LINE
 
-    lea dx, main_menu
-    mov ah, 09h
-    int 21h
+    lea si, main_menu
+    mov dl, STRING_FLAG
+    call display
 
     ret
 show_main_menu endp
 
 show_signup proc
-    lea dx, signup_banner
-    mov ah, 09h
-    int 21h
+    lea si, signup_banner
+    mov dl, STRING_FLAG
+    call display
     ret
 show_signup endp
+
+show_successful_signup proc
+    CHANGE_COLOR 02h , signup_successful_msg
+    ret
+show_successful_signup endp
 
 show_user_info proc
     mov dh, 4
@@ -75,24 +78,25 @@ show_user_info proc
     mov ah, 2
     int 10h
 
-    lea dx, user_decoration
-    mov ah, 09h
-    int 21h
+    lea si, user_decoration
+    mov dl, STRING_FLAG
+    call display
 
     NEW_LINE
 
     mov dh, 5
-    mov dl, 32
+    mov dl, 30
     mov bh, 0
     mov ah, 2
     int 10h
 
-    lea dx, username_format
-    mov ah, 09h
-    int 21h
+    lea si, username_format
+    mov dl, STRING_FLAG
+    call display
 
-    lea dx, username
-    int 21h
+    lea si, username
+    mov dl, STRING_FLAG
+    call display
 
     NEW_LINE
 
@@ -102,32 +106,27 @@ show_user_info proc
     mov ah, 2
     int 10h
 
-    lea dx, balance_format
-    mov ah, 09h
-    int 21h
+    lea si, balance_format
+    mov dl, STRING_FLAG
+    call display
 
-    lea dx, balance
-    mov ah, 09h
-    int 21h
+    lea si, balance
+    mov dl, DIGITS_FLAG
+    call display
 
     NEW_LINE
 
-    lea dx, user_decoration
-    mov ah, 09h
-    int 21h
+    lea si, user_decoration
+    mov dl, STRING_FLAG
+    call display
     ret
 
 show_user_info endp
 
-show_successful_signup proc
-    CHANGE_COLOR 02h , signup_successful_msg
-    ret
-show_successful_signup endp
-
 list_expenses proc
-    lea dx, expenses_menu
-    mov ah, 09h
-    int 21h
+    lea si, expenses_menu
+    mov dl, STRING_FLAG
+    call display
 
     ret
 list_expenses endp

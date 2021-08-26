@@ -9,8 +9,8 @@
     hours db ?
     minutes db ?
     seconds db ?
-    time_decoration db "+-+-+-+-+-+-+-+$"
-    time_format db "00 : 00 : 00$"
+    time_decoration db "+-+-+-+-+-+$"
+    time_format db "00 : 00$"
 
 .code
 show_date proc
@@ -79,9 +79,9 @@ PrintDate:
     mov ah, 2
     int 10h
 
-    lea dx, date_decoration
-    mov ah, 09h
-    int 21h
+    lea si, date_decoration
+    mov dl, STRING_FLAG
+    call display
 
     mov dh, 2
     mov dl, 0
@@ -89,9 +89,9 @@ PrintDate:
     mov ah, 2
     int 10h
 
-    lea dx, date_decoration
-    mov ah, 09h
-    int 21h
+    lea si, date_decoration
+    mov dl, STRING_FLAG
+    call display
 
     mov dh, 1
     mov dl, 1
@@ -99,9 +99,9 @@ PrintDate:
     mov ah, 2
     int 10h
 
-    lea dx, date_format
-    mov ah, 09h
-    int 21h
+    lea si, date_format
+    mov dl, STRING_FLAG
+    call display
     ret
 
 ExtendZero:
@@ -130,41 +130,36 @@ FormatTime:
     mov bx, 5
     call Insert8BitData
 
-    lea si, seconds
-    lea di, time_format
-    mov bx, 10
-    call Insert8BitData
-
 PrintTime:
     mov dh, 0
-    mov dl, 65
+    mov dl, 69
     mov bh, 0
     mov ah, 2
     int 10h
 
-    lea dx, time_decoration
-    mov ah, 09h
-    int 21h
+    lea si, time_decoration
+    mov dl, STRING_FLAG
+    call display
 
     mov dh, 2
-    mov dl, 65
+    mov dl, 69
     mov bh, 0
     mov ah, 2
     int 10h
 
-    lea dx, time_decoration
-    mov ah, 09h
-    int 21h
+    lea si, time_decoration
+    mov dl, STRING_FLAG
+    call display
 
     mov dh, 1
-    mov dl, 67
+    mov dl, 71
     mov bh, 0
     mov ah, 2
     int 10h
 
-    lea dx, time_format
-    mov ah, 09h
-    int 21h
+    lea si, time_format
+    mov dl, STRING_FLAG
+    call display
     ret
 
 show_time endp

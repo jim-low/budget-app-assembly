@@ -1,5 +1,8 @@
 .data
     SINGLE_INPUT db ?
+    CHAR_FLAG db 0
+    STRING_FLAG db 1
+    DIGITS_FLAG db 2
 
 CLEAR macro ; to clear console screen
     mov ax, 0003h
@@ -66,6 +69,47 @@ SingleInput:
     ret
 
 prompt endp
+
+display proc ; si = value, dl = flag
+    cmp dl, CHAR_FLAG
+    je PrintChar
+    cmp dl, STRING_FLAG
+    je PrintString
+    cmp dl, DIGITS_FLAG
+    mov ax, [si]
+    mov cx, 0
+    je PopulateStack
+
+PrintChar:
+    mov dl, [si]
+    add dl, '0'
+    mov ah, 02h
+    int 21h
+    ret
+
+PrintString:
+    lea dx, [si]
+    mov ah, 09h
+    int 21h
+    ret
+
+PopulateStack:
+    mov dx, 0
+    mov bx, 10
+    div bx
+    push dx
+    inc cx
+    cmp ax, 0
+    jne PopulateStack
+PrintDigits:
+    pop dx
+    add dl, '0'
+    mov ah, 02h
+    int 21h
+    loop PrintDigits
+    ret
+
+display endp
 
 ; TODO:
 ; - add a proc for displaying:
