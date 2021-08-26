@@ -33,7 +33,7 @@
 
     signup_successful_msg db 10, 13, "                        -- Successfully Signed Up! --$"
 
-    user_decoration db " +-+-+-+-+-+-+-+-+-+-+-+-+-++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+$"
+    user_decoration db " +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+$"
     username_format db "Username: $"
     balance_format db "Balance: RM$"
 
@@ -43,6 +43,9 @@
 show_main_menu proc
     call show_date
     call show_time
+
+    lea si, username
+    lea di, balance
     call show_user_info
 
     NEW_LINE
@@ -86,7 +89,7 @@ show_user_info proc ; si = username, di = balance
     NEW_LINE
 
     mov dh, 5
-    mov dl, 32
+    mov dl, 30
     mov bh, 0
     mov ah, 2
     int 10h
@@ -110,9 +113,9 @@ show_user_info proc ; si = username, di = balance
     mov ah, 09h
     int 21h
 
-    lea dx, [di]
-    mov ah, 09h
-    int 21h
+    lea si, [di]
+    mov dl, DIGITS_FLAG
+    call display
 
     NEW_LINE
 
