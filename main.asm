@@ -4,9 +4,9 @@
     depart_msg db "thank you for the headache-inducing assignment and the painful torture of learning the assembly language"
                db 13, 10, "we are not grateful and forever resentful. :d$"
     include utils.inc
-    include formulas.asm
-    include login.asm
     include sign-up.asm
+    include login.asm
+    include formulas.asm
     include user-i~1.asm
 
 .code
