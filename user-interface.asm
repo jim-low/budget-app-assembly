@@ -32,6 +32,13 @@
 
     signupSuccessfulMsg db 10, 13, "                        -- Successfully Signed Up! --$"
 
+    loginBanner db 10, 13, "                          _              _"
+                db 10, 13, "                         | |   ___  __ _(_)_ _"
+                db 10, 13, "                         | |__/ _ \/ _` | | ' \"
+                db 10, 13, "                         |____\___/\__, |_|_||_|"
+                db 10, 13, "                                   |___/"
+                db "$"
+
     userDecoration db " +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+$"
     usernameFormat db "Username: $"
     balanceFormat db "Balance: RM$"
@@ -55,7 +62,6 @@ ShowMainMenu proc
     lea si, mainMenu
     mov dl, stringFlag
     call display
-
     ret
 ShowMainMenu endp
 
@@ -70,6 +76,13 @@ ShowSuccessfulSignup proc
     change_color 02h , signupSuccessfulMsg
     ret
 ShowSuccessfulSignup endp
+
+showLogin proc
+    lea si, loginBanner
+    mov dl, STRING_FLAG
+    call display
+    ret
+showLogin endp
 
 ShowUserInfo proc
     mov dh, 4
@@ -127,7 +140,6 @@ ListExpenses proc
     lea si, expensesMenu
     mov dl, stringFlag
     call display
-
     ret
 ListExpenses endp
 
