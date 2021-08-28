@@ -1,8 +1,4 @@
 .data
-    loginBanner db 0dh, 0ah, '           _______________________________ '
-     db 0dh, 0ah, '          (                               )'
-     db 0dh, 0ah, '          (          - login -            )'
-     db 0dh, 0ah, '          (_______________________________)$'
     usernameLoginPrompt db 0dh, 0ah, 0dh, 0ah, '                  username : $'
     passwordLoginPrompt db 0dh, 0ah, '                  password : $'
 
@@ -16,7 +12,6 @@
 
 .code
 login proc
-    ;display login banner
     call ShowLogin
 
 Start:
@@ -25,7 +20,7 @@ Start:
 
 Input:
     ;display usernameLoginPrompt
-    lea di, inputNae
+    lea di, inputName
     lea si, usernameLoginPrompt
     mov singleInput, 0
     call Prompt
