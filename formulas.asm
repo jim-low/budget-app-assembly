@@ -22,14 +22,10 @@
 
 .code
 Start:
-    mov ah, 09h
-    lea dx, promptChoice
-    int 21h
-
-    mov ah, 01h
-    int 21h
-    sub al, 30h
-    mov choice, al
+    lea di, choice
+    lea si, promptChoice
+    mov singleInput, 1
+    call Prompt
 
     cmp choice, 1
     je promptGroceriesExpenses
@@ -39,14 +35,10 @@ Start:
 ;budgetusage = sum of all expenses in that area
 ;(all expenses in one array)(done, use this)
 promptGroceriesExpenses:
-
-    mov ah, 09h
-    lea dx, promptGroceries
-    int 21h
-
-    mov ah, 0ah
-    lea dx, groceriesBuffer
-    int 21h
+    lea di, groceriesBuffer
+    lea si, promptGroceries
+    mov singleInput, 0
+    call Prompt
 
     NEW_LINE
 
@@ -64,13 +56,10 @@ promptGroceriesExpenses:
     call Start
 
 promptBillsExpenses:
-    mov ah, 09h
-    lea dx, promptBills
-    int 21h
-
-    mov ah, 0ah
-    lea dx, billsBuffer
-    int 21h
+    lea di, billsBuffer
+    lea si, PromptBills
+    mov singleInput, 0
+    call Prompt
 
     CLEAR
 
@@ -114,9 +103,7 @@ CalculateNewBalance:
     ;jmp end_program  ;no end_program here, so comment it first
 
 warningMsg:
-    mov ah, 09h
-    lea dx, warning
-    int 21h
+    CHANGE_COLOR 04h, warning
 
 ConvertToNum proc near
     mov bx, 2

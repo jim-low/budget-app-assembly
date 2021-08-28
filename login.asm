@@ -17,9 +17,7 @@
 .code
 login proc
     ;display login banner
-    mov ah, 09h
-    lea dx, loginBanner
-    int 21h
+    call ShowLogin
 
 Start:
     cmp count, 5
@@ -27,14 +25,10 @@ Start:
 
 Input:
     ;display usernameLoginPrompt
-    mov ah, 09h
-    lea dx, usernameLoginPrompt
-    int 21h
-
-    ;get username
-    lea dx, inputName
-    mov ah, 0ah
-    int 21h
+    lea di, inputNae
+    lea si, usernameLoginPrompt
+    mov singleInput, 0
+    call Prompt
 
     mov bx, 0
 CheckName:
@@ -47,16 +41,13 @@ CheckName:
     jmp CheckName
 
 Exceed:
-    mov ah, 09h
-    lea dx, exceeded
-    int 21h
-    jmp Exit
+    CHANGE_COLOR 04h, exceeded
 
     ;display enter psw
 Psw:
-    mov ah, 09h
-    lea dx, passwordLoginPrompt
-    int 21h
+    lea si, passwordLoginPrompt
+    mov dl, stringFlag
+    call Display
 
     mov si, 00
     ;display *
@@ -100,21 +91,12 @@ CheckPsw:
     jne Fail
     inc bx
     loop CheckPsw
-    mov ah, 09h
-    lea dx, success
-    int 21h
-    jmp Exit
+    CHANGE_COLOR 02h, success
 
 Fail:
-    mov ah, 09h
-    lea dx, failed
-    int 21h
+    CHANGE_COLOR 04h, success
     inc count
     jmp Start
-
-Exit:
-    mov ah, 4ch
-    int 21h
 
 login endp
 

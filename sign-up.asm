@@ -25,27 +25,18 @@
 
 .code
 signup proc
-
-    lea si, signup
-    mov dl, stringFlag
-    call display
-
+    call ShowSignup
 
 ;------------------user name-------------------------------------------------------------------------------
 ;-----enter user name message
 UserMsg:
     NEW_LINE
 
+    lea di, username
     lea si, inputMsg
-    mov dl, stringFlag
-    call display
+    mov singleInput, 0
+    call Prompt
 
-
-;----get user input
-InputGetter:
-    lea dx,username
-    mov ah,0ah
-    int 21h
     NEW_LINE
 
 ;-----check for strings and numbers
@@ -81,11 +72,7 @@ CompareWithinLetters:
 
 Error:
     NEW_LINE
-
-    lea si, errorMsg
-    mov dl, stringFlag
-    call display
-
+    CHANGE_COLOR 04h, errorMsg
     jmp UserMsg;
 
 FinalUserInput:
@@ -95,8 +82,7 @@ FinalUserInput:
     mov dl, stringFlag
     call display
 
-
-    lea si, username+2
+    lea si, username + 2
     mov dl, stringFlag
     call display
 
@@ -185,9 +171,7 @@ NextPs:
 ErrorPs:
     NEW_LINE
 
-    lea si, errorPsMsg
-    mov dl, stringFlag
-    call display
+    CHANGE_COLOR 04h, errorPsMsg
 
     NEW_LINE
     jmp Password
