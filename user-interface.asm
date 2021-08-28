@@ -79,7 +79,7 @@ ShowSuccessfulSignup endp
 
 showLogin proc
     lea si, loginBanner
-    mov dl, STRING_FLAG
+    mov dl, stringFlag
     call display
     ret
 showLogin endp
