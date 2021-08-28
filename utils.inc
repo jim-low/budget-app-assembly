@@ -113,23 +113,3 @@ PrintDigits:
 
 Display endp
 
-; TODO:
-; - add a proc for displaying:
-;   - character
-;   - string
-; pro gamer move
-; mov     al, 182         ; meaning that we're about to load
-;    out     43h, al         ; a new countdown value
-;
-;    mov     ax, 2153        ; countdown value is stored in ax. It is calculated by
-;                            ; dividing 1193180 by the desired frequency (with the
-;                            ; number being the frequency at which the main system
-;                            ; oscillator runs
-;    out     42h, al         ; Output low byte.
-;    mov     al, ah          ; Output high byte.
-;    out     42h, al
-;
-;    in      al, 61h
-;                            ; to connect the speaker to timer 2
-;    or      al, 00000011b
-;    out     61h, al         ; Send the new value
