@@ -31,6 +31,13 @@
                   db 10, 13, "                 |___/"
                   db "$"
 
+    login_banner db 10, 13, "                          _              _"
+                 db 10, 13, "                         | |   ___  __ _(_)_ _"
+                 db 10, 13, "                         | |__/ _ \/ _` | | ' \"
+                 db 10, 13, "                         |____\___/\__, |_|_||_|"
+                 db 10, 13, "                                   |___/"
+                 db "$"
+
     signup_successful_msg db 10, 13, "                        -- Successfully Signed Up! --$"
 
     user_decoration db " +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+$"
@@ -66,6 +73,13 @@ show_signup proc
     call display
     ret
 show_signup endp
+
+show_login proc
+    lea si, login_banner
+    mov dl, STRING_FLAG
+    call display
+    ret
+show_login endp
 
 show_successful_signup proc
     CHANGE_COLOR 02h , signup_successful_msg
