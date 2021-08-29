@@ -6,7 +6,7 @@
             db 10, 13, "                              |___/                |_|  |_|"
             db "$"
 
-    mainMenu db 10, 13, "                  =============== main menu =============="
+    mainMenu db 10, 13, "                  =============== Main Menu =============="
               db 10, 13, "                    1. Record Transaction"
               db 10, 13, "                    2. Display Total Income Percentage"
               db 10, 13, "                    3. Display Total Expenses Percentage"
@@ -14,13 +14,14 @@
               db 10, 13, "                  ========================================"
               db "$"
 
-    expensesMenu db 10, 13, "                      ========== expenses ========="
+    expensesMenu db 10, 13, "                      ========== Expenses ========="
                   db 10, 13, "                        1. Groceries"
                   db 10, 13, "                        2. Vehicle"
                   db 10, 13, "                        3. Accomodation"
                   db 10, 13, "                        4. Bills"
                   db 10, 13, "                        5. Insurance"
-                  db 10, 13, "                      ============================="
+                  db 10, 13, "                        6. Exit"
+                  db 10, 13, "                     ============================="
                   db "$"
 
     signupBanner db 10, 13, "          ___          _    _               _                      _"
