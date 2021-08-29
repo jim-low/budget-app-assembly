@@ -6,7 +6,7 @@
             db 10, 13, "                              |___/                |_|  |_|"
             db "$"
 
-    mainMenu db 10, 13, "                  =============== main menu =============="
+    mainMenu db 10, 13, "                  =============== Main Menu =============="
               db 10, 13, "                    1. Record Transaction"
               db 10, 13, "                    2. Display Total Income Percentage"
               db 10, 13, "                    3. Display Total Expenses Percentage"
@@ -14,13 +14,21 @@
               db 10, 13, "                  ========================================"
               db "$"
 
-    expensesMenu db 10, 13, "                      ========== expenses ========="
+    transactionSelectionMenu db 10, 13, "                  =============== Selection =============="
+                             db 10, 13, "                       1. Income Transaction"
+                             db 10, 13, "                       2. Expenses Transaction"
+                             db 10, 13, "                       3. Exit"
+                             db 10, 13, "                  ========================================"
+                             db "$"
+
+    expensesMenu db 10, 13, "                      ========== Expenses ========="
                   db 10, 13, "                        1. Groceries"
                   db 10, 13, "                        2. Vehicle"
                   db 10, 13, "                        3. Accomodation"
                   db 10, 13, "                        4. Bills"
                   db 10, 13, "                        5. Insurance"
-                  db 10, 13, "                      ============================="
+                  db 10, 13, "                        6. Exit"
+                  db 10, 13, "                     ============================="
                   db "$"
 
     signupBanner db 10, 13, "          ___          _    _               _                      _"
@@ -79,7 +87,7 @@ ShowSuccessfulSignup endp
 
 showLogin proc
     lea si, loginBanner
-    mov dl, STRING_FLAG
+    mov dl, stringFlag
     call display
     ret
 showLogin endp
@@ -107,7 +115,7 @@ ShowUserInfo proc
     mov dl, stringFlag
     call display
 
-    lea si, username
+    lea si, username + 2
     mov dl, stringFlag
     call display
 
@@ -123,7 +131,7 @@ ShowUserInfo proc
     mov dl, stringFlag
     call display
 
-    lea si, balance
+    lea si, newBalance
     mov dl, digitsFlag
     call display
 
