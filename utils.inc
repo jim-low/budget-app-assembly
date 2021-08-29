@@ -65,7 +65,7 @@ ReadMultiInput:
 ReadSingleInput:
     mov ah, 01h
     int 21h
-    mov [di + bx], al
+    mov [di], al
     ret
 
 Prompt endp
