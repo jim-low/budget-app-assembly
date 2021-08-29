@@ -107,7 +107,7 @@ ShowUserInfo proc
     mov dl, stringFlag
     call display
 
-    lea si, username
+    lea si, username + 2
     mov dl, stringFlag
     call display
 
@@ -123,7 +123,7 @@ ShowUserInfo proc
     mov dl, stringFlag
     call display
 
-    lea si, balance
+    lea si, newBalance
     mov dl, digitsFlag
     call display
 

@@ -1,26 +1,27 @@
 .data
 ;-------------------------------------user name-------------------------------------------------------------
-    inputMsg db "please enter and create your user name :  $"
-    errorMsg db "incorect userinput (capital letters and numbers only) $"
-    username db 30,?,32 dup("$")
+    usernameInputMsg db "please enter and create your user name :  $"
+    errorMsg db "incorrect user input (capital letters and numbers only) $"
+    username db 30,?, "Jim$"
     usernameHasNumber db 0
     usernameHasCapitalLetter db 0
     validUsername db 1
     usernameConfirmationMsg db "your user name is comfirmed >>> $"
 ;-------------------------------------user name-------------------------------------------------------------
+
 ;-------------------------------------Password--------------------------------------------------------------
-    inputPsMsg db "please enter your desired password [length = 10] : $"
-    confirmPsMsg db "please comfirm your password : $"
-    finalPsMsg db "thank you for your password comfirmation : $"
-    inputPs db 10,?,10 dup("$")
-    errorPsMsg db  10,13,"your password is not in the correct form"
+    inputPasswordMsg db "please enter your desired password [length = 10] : $"
+    confirmPasswordMsg db "please confirm your password : $"
+    finalConfirmationPasswordMsg db "thank you for your password comfirmation : $"
+    password db 10,?,10 dup("$")
+    incorrectPasswordMsg db  10,13,"your password is not in the correct form"
                db  10,13,"possible error:"
                db  10,13,"              1) not in 10 characters form"
                db  10,13,"              2) password must contain (uppercase,lowercase,number characters)"
                db  10,13,"              3) only characters metioned in 2) is acceptable$"
-    nums db 0
-    lowerLetters db 0
-    upperLetters db 0
+    passwordHasNumber db 0
+    passwordHasLowerCase db 0
+    passwordHasUpperCase db 0
 ;-------------------------------------password-------------------------------------------------------------
 
 .code
@@ -33,7 +34,7 @@ UserMsg:
     NEW_LINE
 
     lea di, username
-    lea si, inputMsg
+    lea si, usernameInputMsg
     mov singleInput, 0
     call Prompt
 
@@ -86,14 +87,14 @@ FinalUserInput:
     mov dl, stringFlag
     call display
 
-    jmp Password
+    jmp InputPassword
 
 ;------------------user name---------------------------------------------------------------------------
 ;------------------password----------------------------------------------------------------------------
-Password:
+InputPassword:
     NEW_LINE
 
-    lea si, inputPsMsg
+    lea si, inputPasswordMsg
     mov dl, stringFlag
     call display
 
@@ -105,7 +106,7 @@ Password:
 GetInputPs:
     mov ah,07h
     int 21h
-    mov inputPs[si],al
+    mov password[si],al
     inc si
 
     mov ah,02h
@@ -122,46 +123,49 @@ ChkStrLength:
     jne ChkNum
 
 ChkNum:
-    cmp inputPs[si],48
+    cmp password[si],48
     jb ErrorPs
 
-    cmp inputPs[si],57
+    cmp password[si],57
     jbe AddNum
 
 ChkLetters:
-    cmp inputPs[si],'a'
+    cmp password[si],'a'
     jb ErrorPs
 
-    cmp inputPs[si],'z'
+    cmp password[si],'z'
     jbe NextPs
 
-    cmp inputPs[si],'a'
+    cmp password[si],'a'
     jb ErrorPs
 
-    cmp inputPs[si],'z'
+    cmp password[si],'z'
     jbe NextPs
     ja ErrorPs
 
 AddNum:
-    inc nums
+    inc passwordHasNumber
     jmp NextPs
 
 LowLetters:
-    inc lowerLetters
+    inc passwordHasLowerCase
     jmp NextPs
 
 UpLetters:
-    inc upperLetters
+    inc passwordHasUpperCase
     jmp NextPs
 
 CheckNumAndLetters:
-    cmp nums,0
-    jne Password
-    cmp lowerLetters,0
-    jne Password
-    cmp upperLetters,0
-    jne Password
-    jmp FinalMsg
+    cmp passwordHasNumber, 0
+    jne FinalMsg
+
+    cmp passwordHasLowerCase, 0
+    jne FinalMsg
+
+    cmp passwordHasUpperCase, 0
+    jne FinalMsg
+
+    jmp InputPassword
 
 NextPs:
     inc si
@@ -171,24 +175,22 @@ NextPs:
 ErrorPs:
     NEW_LINE
 
-    CHANGE_COLOR 04h, errorPsMsg
+    CHANGE_COLOR 04h, incorrectPasswordMsg
 
     NEW_LINE
-    jmp Password
+    jmp InputPassword
 
 FinalMsg:
     NEW_LINE
 
-    lea si, finalPsMsg
+    lea si, finalConfirmationPasswordMsg
     mov dl, stringFlag
     call display
 
-
-    lea si, inputPs
+    lea si, password
     mov dl, stringFlag
     call display
-
-    jmp exit
+    ret
 
 signup endp
 

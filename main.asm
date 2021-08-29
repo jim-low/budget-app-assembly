@@ -2,7 +2,9 @@
 .stack 100
 .data
     departMsg db "Thank you for the headache-inducing assignment and the painful torture of learning the Assembly Language"
-               db 13, 10, "We are not grateful and forever resentful. :D$"
+              db 13, 10, "We are not grateful and forever resentful. :D$"
+    choiceErrorMsg db "clearly the list is only from 1 to 6, but you still went over it$"
+    choice db ?
     include utils.inc
     include sign-up.asm
     include login.asm
@@ -13,6 +15,16 @@
 main proc
     mov ax, @data
     mov ds, ax
+
+Start:
+    CLEAR
+    call ShowMainMenu
+
+InvalidChoice:
+    lea si, choiceErrorMsg
+    mov dl, stringFlag
+    call Display
+    jmp Start
 
 EndProgram:
     mov ah, 4ch

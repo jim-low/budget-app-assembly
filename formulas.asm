@@ -2,8 +2,7 @@
     promptChoice db 0dh, 0ah, "enter your choice(1 - groceries, 2 - bills): $"
     promptGroceries db 0dh, 0ah, "enter your groceries expenses: $"
     promptBills db 0dh, 0ah, "enter your bills expenses: $"
-    warning db "dosbox does not support 32 bits and above$"
-    choice db ?
+    warning db "16 bit dont go more than 65355, too bad$"
     five dw 5
     ten dw 10
     hundred dw 100
@@ -16,24 +15,11 @@
     billsTail dw 1      ;tail is different and fixed for every expense
     billsExpenses dw 0
     sumOfAllExpenses dw 0
-    newBalance dw 0
-    currentBalance dw 9855
+    newBalance dw 42069
+    currentBalance dw 0
     overallBudgetUsage dw ?
 
 .code
-Start:
-    lea di, choice
-    lea si, promptChoice
-    mov singleInput, 1
-    call Prompt
-
-    cmp choice, 1
-    je promptGroceriesExpenses
-    cmp choice, 2
-    je promptBillsExpenses
-
-;budgetusage = sum of all expenses in that area
-;(all expenses in one array)(done, use this)
 promptGroceriesExpenses:
     lea di, groceriesBuffer
     lea si, promptGroceries
@@ -43,17 +29,14 @@ promptGroceriesExpenses:
     NEW_LINE
 
     lea si, groceriesBuffer
-    lea di, groceriesExpenses   ;to store the current groceries expense, which will be added to expenses_array later
+    lea di, groceriesExpenses
     call ConvertToNum
     call CalculateGroceriesSST
 
     lea si, expensesArray
-    mov ax, groceriesExpenses  ;groceries_expenses = 1234
-    mov bx, groceriesTail      ;groceries_tail = 0
+    mov ax, groceriesExpenses
+    mov bx, groceriesTail
     call InsertIntoExpensesArray
-
-    CLEAR
-    call Start
 
 promptBillsExpenses:
     lea di, billsBuffer
@@ -61,20 +44,15 @@ promptBillsExpenses:
     mov singleInput, 0
     call Prompt
 
-    CLEAR
-
     lea si, billsBuffer
     lea di, billsExpenses
     call ConvertToNum
 
-    lea si, expensesArray  ;load the address of the array into si, si is now pointing to the array
+    lea si, expensesArray
     mov ax, billsExpenses
-    mov bx, billsTail      ;bx = 1
+    mov bx, billsTail
     call InsertIntoExpensesArray
 
-    CLEAR
-
-    ;newbalance = currentbalance - expenses (done)
 SumAllExpenses:
     mov cx, 5
     mov ax, 0
@@ -91,7 +69,6 @@ CalculateNewBalance:
     sub ax, sumOfAllExpenses
     mov newBalance, ax
 
-    ;overallbudgetusage = sum of all expenses * 100 / previousbalance (forever wip)
     mov dx, 0
     mov ax, sumOfAllExpenses
     cmp ax, 655
@@ -100,12 +77,12 @@ CalculateNewBalance:
     div currentBalance
     mov overallBudgetUsage, ax
 
-    ;jmp end_program  ;no end_program here, so comment it first
+    ;jmp end_program  ;no end_program here, so comment it first ;very sad time
 
 warningMsg:
     CHANGE_COLOR 04h, warning
 
-ConvertToNum proc near
+ConvertToNum proc
     mov bx, 2
     mov ax, 0
 Convert:
@@ -130,7 +107,7 @@ EndConversion:
     ret
 ConvertToNum endp
 
-CalculateGroceriesSST proc near
+CalculateGroceriesSST proc
     mov ax, groceriesExpenses
     mul five
     div hundred
@@ -142,10 +119,9 @@ CalculateGroceriesSST proc near
     ret
 CalculateGroceriesSST endp
 
-InsertIntoExpensesArray proc near
+InsertIntoExpensesArray proc
 InsertIntoExpensesArr:
-    ;add si, bx    ;[si+bx]
-    add [si+bx], ax  ;access the memory of si => location of the 1st element => add the value of ax there
+    add [si+bx], ax
     mov bx, 0
     jmp EndInsertion
 
