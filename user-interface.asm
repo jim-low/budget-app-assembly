@@ -14,6 +14,13 @@
               db 10, 13, "                  ========================================"
               db "$"
 
+    transactionSelectionMenu db 10, 13, "                  =============== Selection =============="
+                             db 10, 13, "                       1. Income Transaction"
+                             db 10, 13, "                       2. Expenses Transaction"
+                             db 10, 13, "                       3. Exit"
+                             db 10, 13, "                  ========================================"
+                             db "$"
+
     expensesMenu db 10, 13, "                      ========== Expenses ========="
                   db 10, 13, "                        1. Groceries"
                   db 10, 13, "                        2. Vehicle"
