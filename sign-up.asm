@@ -24,7 +24,6 @@
     passwordHasNumber db 0
     passwordHasLowerCase db 0
     passwordHasUpperCase db 0
-    secretKey db 69
 ;-------------------------------------password-------------------------------------------------------------
 
 .code
