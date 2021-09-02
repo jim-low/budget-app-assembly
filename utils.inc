@@ -3,6 +3,8 @@
     charFlag db 0
     stringFlag db 1
     digitsFlag db 2
+    encryptFlag db 0
+    secretKey db 69
 
 CLEAR macro ; to clear console screen
     mov ax, 0003h
@@ -112,4 +114,31 @@ PrintDigits:
     ret
 
 Display endp
+
+Cryptogramify proc ; si = string to encrypt/decrypt, encryptFlag = boolean
+    cmp encryptFlag, 1
+    je Encrypt
+
+Decrypt:
+    mov dl, [si]
+    cmp dl, "$"
+    je EndCryption
+    add dl, secretKey
+    mov [si], dl
+    inc si
+    jmp Decrypt
+
+Encrypt:
+    mov dl, [si]
+    cmp dl, "$"
+    je EndCryption
+    sub dl, secretKey
+    mov [si], dl
+    inc si
+    jmp Encrypt
+
+EndCryption:
+    ret
+
+Cryptogramify endp
 
