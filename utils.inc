@@ -116,28 +116,29 @@ PrintDigits:
 Display endp
 
 Cryptogramify proc ; si = string to encrypt/decrypt, encryptFlag = boolean
-    cmp encryptFlag, 1
-    je Encrypt
+    mov ax, 0
+    mov al, secretKey
 
-Decrypt:
+    cmp encryptFlag, 0
+    je SetSecretKey
+    jmp CryptogramifyPassword
+
+SetSecretKey:
+    mov bx, -1
+    mul bx
+    mov secretKey, al
+
+CryptogramifyPassword:
     mov dl, [si]
     cmp dl, "$"
     je EndCryption
     add dl, secretKey
     mov [si], dl
     inc si
-    jmp Decrypt
-
-Encrypt:
-    mov dl, [si]
-    cmp dl, "$"
-    je EndCryption
-    sub dl, secretKey
-    mov [si], dl
-    inc si
-    jmp Encrypt
+    jmp CryptogramifyPassword
 
 EndCryption:
+    mov secretKey, 69
     ret
 
 Cryptogramify endp
