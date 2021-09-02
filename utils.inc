@@ -72,6 +72,52 @@ ReadSingleInput:
 
 Prompt endp
 
+PromptPassword proc ; di = password destination, si = prompt message
+    lea dx, [si]
+    mov ah, 09h
+    int 21h
+
+    mov bx, 0
+GetPasswordChar:
+    mov ah, 08h
+    int 21h
+    mov [di], al
+    cmp al, 08h ; backspace
+    je Backspace
+    cmp al, 0dh
+    jne InsertPasswordChar
+    ret
+
+InsertPasswordChar:
+    mov dl, "*"
+    mov ah, 02h
+    int 21h
+    inc di
+    inc bx
+    jmp GetPasswordChar
+
+Backspace:
+    cmp bx, 0
+    jle GetPasswordChar
+
+    mov dl, 08h
+    mov ah, 02h
+    int 21h
+
+    mov dl, " "
+    mov ah, 02h
+    int 21h
+
+    mov dl, 08h
+    mov ah, 02h
+    int 21h
+
+    dec di
+    dec bx
+    jmp GetPasswordChar
+
+PromptPassword endp
+
 Display proc ; si = value, dl = flag
     cmp dl, charFlag
     je DisplayChar

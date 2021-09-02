@@ -1,8 +1,8 @@
 .data
 ;-------------------------------------user name-------------------------------------------------------------
-    usernameInputMsg db "please enter and create your user name :  $"
-    errorMsg db "incorrect user input (capital letters and numbers only) $"
-    username db 30,?,32 dup ("$")
+    usernameInputMsg db "please enter and create your user name:  $"
+    errorMsg db "incorrect user input (capital letters and numbers only)$"
+    username db 30, ?, 30 + 2 dup ("$")
     usernameHasNumber db 0
     usernameHasCapitalLetter db 0
     validUsername db 1
@@ -15,12 +15,12 @@
     inputPasswordMsg db "please enter your desired password [length = 10] : $"
     confirmPasswordMsg db "please confirm your password : $"
     finalConfirmationPasswordMsg db "thank you for your password comfirmation : $"
-    password db 30,?,32 dup("$")
+    password db 30 dup ("$")
     incorrectPasswordMsg db  10,13,"your password is not in the correct form"
-               db  10,13,"possible error:"
-               db  10,13,"              1) not in 10 characters form"
-               db  10,13,"              2) password must contain (uppercase,lowercase,number characters)"
-               db  10,13,"              3) only characters metioned in 2) is acceptable$"
+                         db  10,13,"possible error:"
+                         db  10,13,"              1) not in 10 characters form"
+                         db  10,13,"              2) password must contain (uppercase,lowercase,number characters)"
+                         db  10,13,"              3) only characters metioned in 2) is acceptable$"
     passwordHasNumber db 0
     passwordHasLowerCase db 0
     passwordHasUpperCase db 0
@@ -29,6 +29,7 @@
 .code
 signup proc
     call ShowSignup
+    ;ret
 
 ;------------------user name-------------------------------------------------------------------------------
 ;-----enter user name message
@@ -48,14 +49,16 @@ UserMsg:
 ValidateUsername:
     mov dl,username[bx+2]
     cmp dl,0dh
-    je FinalUserInput
+    jg ValidateNumbers
+    jmp FinalUserInput
+
 ValidateNumbers:
     cmp dl,'0'
     jl Error
     jmp CompareWithinNumbers
 
 ValidateCapitalLetter:
-    cmp dl,'a'
+    cmp dl,'A'
     jl Error
     jmp CompareWithinLetters
 
@@ -68,7 +71,7 @@ CompareWithinNumbers:
     jg ValidateCapitalLetter
 
 CompareWithinLetters:
-    cmp dl,'z'
+    cmp dl,'Z'
     jg Error
     jmp EndValidate
 ;----------------------------------------
@@ -83,7 +86,7 @@ Error:
 
 signUpExceed:
     NEW_LINE
-    lea si,inputExceedMsg 
+    lea si,inputExceedMsg
     mov dl,stringFlag
     call display
     mov inputCount,0
@@ -93,7 +96,7 @@ signUpExceed:
     mov passwordHasNumber,0
     mov passwordHasUpperCase,0
     mov passwordHasLowerCase,0
-    jmp main
+    jmp EndProgram ; for now
 
 FinalUserInput:
     NEW_LINE
@@ -106,40 +109,21 @@ FinalUserInput:
     mov dl, stringFlag
     call display
 
-    jmp InputPassword
+    NEW_LINE
 
 ;------------------user name---------------------------------------------------------------------------
 ;------------------password----------------------------------------------------------------------------
 InputPassword:
-    NEW_LINE
-
     lea si, inputPasswordMsg
-    mov dl, stringFlag
-    call display
+    lea di, password
+    call PromptPassword
 
-
-;-get input
-    mov cx,15
-    mov si,0
-
-GetInputPs:
-    mov ah,07h
-    int 21h
-    mov password[si],al
-    inc si
-
-    mov ah,02h
-    mov dl,'@'
-    int 21h
-    loop GetInputPs
-    NEW_LINE
-
-    mov si,0
+    mov si, 0
 ;-----------password validation
 ChkStrLength:
-    cmp si,15
+    cmp si,10
     je CheckNumAndLetters
-    jne ChkNum
+    jmp ChkNum
 
 ChkNum:
     cmp password[si],48
@@ -149,17 +133,17 @@ ChkNum:
     jbe AddNum
 
 ChkLetters:
+    cmp password[si],'A'
+    jb ErrorPs
+
+    cmp password[si],'Z'
+    jbe UpLetters
+
     cmp password[si],'a'
     jb ErrorPs
 
     cmp password[si],'z'
-    jbe NextPs
-
-    cmp password[si],'a'
-    jb ErrorPs
-
-    cmp password[si],'z'
-    jbe NextPs
+    jbe LowLetters
     ja ErrorPs
 
 AddNum:
@@ -190,19 +174,20 @@ NextPs:
     inc si
     jmp ChkStrLength
 
-
 ErrorPs:
     NEW_LINE
 
     CHANGE_COLOR 04h, incorrectPasswordMsg
 
     NEW_LINE
+
     jmp InputPassword
 
 FinalMsg:
-    lea si,password+2
-    mov encryptFlag,1
+    lea si, password
+    mov encryptFlag, 1
     call cryptogramify
+
     NEW_LINE
 
     lea si, finalConfirmationPasswordMsg
