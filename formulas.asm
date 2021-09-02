@@ -99,7 +99,7 @@ promptVehicleExpenses:
     mov ax, vehicleExpenses
     mov bx, vehicleTail
     call InsertIntoExpensesArray
-	
+
 	CLEAR
     call Start
 
@@ -119,7 +119,7 @@ promptAccomodationExpenses:
     mov ax, accomodationExpenses
     mov bx, accomodationTail
     call InsertIntoExpensesArray
-	
+
 	CLEAR
     call Start
 
@@ -142,7 +142,7 @@ promptBillsExpenses:
 
     CLEAR
     call Start
-	
+
 promptInsuranceExpenses:
     lea di, insuranceBuffer
     lea si, promptInsurance
@@ -159,7 +159,7 @@ promptInsuranceExpenses:
     mov ax, insuranceExpenses
     mov bx, insuranceTail
     call InsertIntoExpensesArray
-	
+
 	CLEAR
     call Start
 
@@ -194,7 +194,7 @@ CalculateNewBalance:
 warningMsg:
     CHANGE_COLOR 04h, warning
 
-ConvertToNum proc near
+ConvertToNum proc
     mov bx, 2
     mov ax, 0
 Convert:
@@ -219,7 +219,7 @@ EndConversion:
     ret
 ConvertToNum endp
 
-CalculateGroceriesSST proc near
+CalculateGroceriesSST proc
     mov ax, groceriesExpenses
     mul five
     div hundred
@@ -231,10 +231,9 @@ CalculateGroceriesSST proc near
     ret
 CalculateGroceriesSST endp
 
-InsertIntoExpensesArray proc near
+InsertIntoExpensesArray proc
 InsertIntoExpensesArr:
-    ;add si, bx    ;[si+bx]
-    add [si+bx], ax  ;access the memory of si => location of the 1st element => add the value of ax there
+    add [si+bx], ax
     mov bx, 0
     jmp EndInsertion
 

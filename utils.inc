@@ -1,8 +1,10 @@
 .data
-    SINGLE_INPUT db ?
-    CHAR_FLAG db 0
-    STRING_FLAG db 1
-    DIGITS_FLAG db 2
+    singleInput db ?
+    charFlag db 0
+    stringFlag db 1
+    digitsFlag db 2
+    encryptFlag db 0
+    secretKey db 69
 
 CLEAR macro ; to clear console screen
     mov ax, 0003h
@@ -30,11 +32,11 @@ endm
 ; 7 = White
 ; 8 = Gray
 ; 9 = Light Blue
-CHANGE_COLOR macro color_code, msg
+CHANGE_COLOR macro colorCode, msg
     mov ah, 09h
     mov cx, 1000h
     mov al, 20h
-    mov bl, color_code
+    mov bl, colorCode
     int 10h
 
     lea dx, msg
@@ -47,47 +49,49 @@ CHANGE_COLOR macro color_code, msg
 endm
 
 .code
-prompt proc ; di = dest, si = msg, SINGLE_INPUT = count
+Prompt proc ; di = dest, si = msg, singleInput = count
     lea dx, [si]
     mov ah, 09h
     int 21h
 
-    cmp SINGLE_INPUT, 1
-    je SingleInput
-    jmp MultiInput
+    cmp singleInput, 1
+    je ReadSingleInput
+    jmp ReadMultiInput
 
-MultiInput:
+ReadMultiInput:
     lea dx, [di]
     mov ah, 0ah
     int 21h
     ret
 
-SingleInput:
+ReadSingleInput:
     mov ah, 01h
     int 21h
-    mov [di + bx], al
+    mov [di], al
     ret
 
-prompt endp
+Prompt endp
 
-display proc ; si = value, dl = flag
-    cmp dl, CHAR_FLAG
-    je PrintChar
-    cmp dl, STRING_FLAG
-    je PrintString
-    cmp dl, DIGITS_FLAG
+Display proc ; si = value, dl = flag
+    cmp dl, charFlag
+    je DisplayChar
+
+    cmp dl, stringFlag
+    je DisplayString
+
+    cmp dl, digitsFlag
     mov ax, [si]
     mov cx, 0
     je PopulateStack
 
-PrintChar:
+DisplayChar:
     mov dl, [si]
     add dl, '0'
     mov ah, 02h
     int 21h
     ret
 
-PrintString:
+DisplayString:
     lea dx, [si]
     mov ah, 09h
     int 21h
@@ -109,25 +113,33 @@ PrintDigits:
     loop PrintDigits
     ret
 
-display endp
+Display endp
 
-; TODO:
-; - add a proc for displaying:
-;   - character
-;   - string
-; pro gamer move
-; mov     al, 182         ; meaning that we're about to load
-;    out     43h, al         ; a new countdown value
-;
-;    mov     ax, 2153        ; countdown value is stored in ax. It is calculated by
-;                            ; dividing 1193180 by the desired frequency (with the
-;                            ; number being the frequency at which the main system
-;                            ; oscillator runs
-;    out     42h, al         ; Output low byte.
-;    mov     al, ah          ; Output high byte.
-;    out     42h, al
-;
-;    in      al, 61h
-;                            ; to connect the speaker to timer 2
-;    or      al, 00000011b
-;    out     61h, al         ; Send the new value
+Cryptogramify proc ; si = string to encrypt/decrypt, encryptFlag = boolean
+    mov ax, 0
+    mov al, secretKey
+
+    cmp encryptFlag, 0
+    je SetSecretKey
+    jmp CryptogramifyPassword
+
+SetSecretKey:
+    mov bx, -1
+    mul bx
+    mov secretKey, al
+
+CryptogramifyPassword:
+    mov dl, [si]
+    cmp dl, "$"
+    je EndCryption
+    add dl, secretKey
+    mov [si], dl
+    inc si
+    jmp CryptogramifyPassword
+
+EndCryption:
+    mov secretKey, 69
+    ret
+
+Cryptogramify endp
+
