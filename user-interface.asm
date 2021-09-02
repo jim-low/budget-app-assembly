@@ -7,12 +7,12 @@
             db "$"
 
     mainMenu db 10, 13, "                  =============== Main Menu =============="
-              db 10, 13, "                    1. Record Transaction"
-              db 10, 13, "                    2. Display Total Income Percentage"
-              db 10, 13, "                    3. Display Total Expenses Percentage"
-              db 10, 13, "                    4. Exit"
-              db 10, 13, "                  ========================================"
-              db "$"
+             db 10, 13, "                    1. Record Transaction"
+             db 10, 13, "                    2. Display Total Income Percentage"
+             db 10, 13, "                    3. Display Total Expenses Percentage"
+             db 10, 13, "                    4. Exit"
+             db 10, 13, "                  ========================================"
+             db "$"
 
     transactionBanner db 10, 13, "               _____                          _   _          "
                       db 10, 13, "              |_   _| _ __ _ _ _  ___ __ _ __| |_(_)___ _ _  "
@@ -29,23 +29,21 @@
                              db "$"
 
     expensesMenu db 10, 13, "                      ========== Expenses ========="
-                  db 10, 13, "                        1. Groceries"
-                  db 10, 13, "                        2. Vehicle"
-                  db 10, 13, "                        3. Accomodation"
-                  db 10, 13, "                        4. Bills"
-                  db 10, 13, "                        5. Insurance"
-                  db 10, 13, "                        6. Exit"
-                  db 10, 13, "                     ============================="
-                  db "$"
+                 db 10, 13, "                        1. Groceries"
+                 db 10, 13, "                        2. Vehicle"
+                 db 10, 13, "                        3. Accomodation"
+                 db 10, 13, "                        4. Bills"
+                 db 10, 13, "                        5. Insurance"
+                 db 10, 13, "                        6. Exit"
+                 db 10, 13, "                     ============================="
+                 db "$"
 
     signupBanner db 10, 13, "          ___          _    _               _                      _"
-                  db 10, 13, "         | _ \___ __ _(_)__| |_ ___ _ _    /_\  __ __ ___ _  _ _ _| |_"
-                  db 10, 13, "         |   / -_) _` | (_-<  _/ -_) '_|  / _ \/ _/ _/ _ \ || | ' \  _|"
-                  db 10, 13, "         |_|_\___\__, |_/__/\__\___|_|   /_/ \_\__\__\___/\_,_|_||_\__|"
-                  db 10, 13, "                 |___/"
-                  db "$"
-
-    signupSuccessfulMsg db 10, 13, "                        -- Successfully Signed Up! --$"
+                 db 10, 13, "         | _ \___ __ _(_)__| |_ ___ _ _    /_\  __ __ ___ _  _ _ _| |_"
+                 db 10, 13, "         |   / -_) _` | (_-<  _/ -_) '_|  / _ \/ _/ _/ _ \ || | ' \  _|"
+                 db 10, 13, "         |_|_\___\__, |_/__/\__\___|_|   /_/ \_\__\__\___/\_,_|_||_\__|"
+                 db 10, 13, "                 |___/"
+                 db "$"
 
     loginBanner db 10, 13, "                          _              _"
                 db 10, 13, "                         | |   ___  __ _(_)_ _"
@@ -100,17 +98,12 @@ ShowSignup proc
     ret
 ShowSignup endp
 
-ShowSuccessfulSignup proc
-    change_color 02h , signupSuccessfulMsg
-    ret
-ShowSuccessfulSignup endp
-
-showLogin proc
+ShowLogin proc
     lea si, loginBanner
     mov dl, stringFlag
     call display
     ret
-showLogin endp
+ShowLogin endp
 
 ShowUserInfo proc
     mov dh, 4
