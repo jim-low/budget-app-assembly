@@ -14,6 +14,13 @@
               db 10, 13, "                  ========================================"
               db "$"
 
+    transactionBanner db 10, 13, "               _____                          _   _          "
+                      db 10, 13, "              |_   _| _ __ _ _ _  ___ __ _ __| |_(_)___ _ _  "
+                      db 10, 13, "                | || '_/ _` | ' \(_-</ _` / _|  _| / _ \ ' \ "
+                      db 10, 13, "                |_||_| \__,_|_||_/__/\__,_\__|\__|_\___/_||_|"
+                      db "$"
+
+
     transactionSelectionMenu db 10, 13, "                  =============== Selection =============="
                              db 10, 13, "                       1. Income Transaction"
                              db 10, 13, "                       2. Expenses Transaction"
@@ -74,7 +81,13 @@ ShowMainMenu proc
 ShowMainMenu endp
 
 ShowTransactionMenu proc
-    lea si, signupBanner
+    lea si, transactionBanner
+    mov dl, stringFlag
+    call display
+
+    NEW_LINE
+
+    lea si, transactionSelectionMenu
     mov dl, stringFlag
     call display
     ret
