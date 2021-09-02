@@ -2,18 +2,20 @@
 ;-------------------------------------user name-------------------------------------------------------------
     usernameInputMsg db "please enter and create your user name :  $"
     errorMsg db "incorrect user input (capital letters and numbers only) $"
-    username db 30,?, "Jim$"
+    username db 30,?,32 dup ("$")
     usernameHasNumber db 0
     usernameHasCapitalLetter db 0
     validUsername db 1
     usernameConfirmationMsg db "your user name is comfirmed >>> $"
+    inputExceedMsg db "You have exceeded the maximum amount of tries,please try again later$"
+    inputCount db 0
 ;-------------------------------------user name-------------------------------------------------------------
 
 ;-------------------------------------Password--------------------------------------------------------------
     inputPasswordMsg db "please enter your desired password [length = 10] : $"
     confirmPasswordMsg db "please confirm your password : $"
     finalConfirmationPasswordMsg db "thank you for your password comfirmation : $"
-    password db 10,?,10 dup("$")
+    password db 30,?,32 dup("$")
     incorrectPasswordMsg db  10,13,"your password is not in the correct form"
                db  10,13,"possible error:"
                db  10,13,"              1) not in 10 characters form"
@@ -74,7 +76,24 @@ CompareWithinLetters:
 Error:
     NEW_LINE
     CHANGE_COLOR 04h, errorMsg
+    inc InputCount
+    cmp InputCount,3
+    je signUpExceed
     jmp UserMsg;
+
+signUpExceed:
+    NEW_LINE
+    lea si,inputExceedMsg 
+    mov dl,stringFlag
+    call display
+    mov inputCount,0
+    mov usernameHasNumber,0
+    mov usernameHasCapitalLetter,0
+    mov validUsername,1
+    mov passwordHasNumber,0
+    mov passwordHasUpperCase,0
+    mov passwordHasLowerCase,0
+    jmp main
 
 FinalUserInput:
     NEW_LINE
@@ -181,6 +200,9 @@ ErrorPs:
     jmp InputPassword
 
 FinalMsg:
+    lea si,password+2
+    mov encryptFlag,1
+    call cryptogramify
     NEW_LINE
 
     lea si, finalConfirmationPasswordMsg
