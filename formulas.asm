@@ -1,25 +1,67 @@
 .data
     promptChoice db 0dh, 0ah, "enter your choice(1 - groceries, 2 - bills): $"
     promptGroceries db 0dh, 0ah, "enter your groceries expenses: $"
-    promptBills db 0dh, 0ah, "enter your bills expenses: $"
-    warning db "16 bit dont go more than 65355, too bad$"
+	promptVehicle db 0dh, 0ah, "enter your vehicle expenses: $"
+	promptAccomodation db 0dh, 0ah, "enter your accomodation expenses: $"
+	promptBills db 0dh, 0ah, "enter your bills expenses: $"
+    promptInsurance db 0dh, 0ah, "enter your insurance expenses: $"
+	promptIncome db 0dh, 0ah, "enter your income: $"
+	incomeBuffer dw 18, ?, 20 dup ("$")
+	currentIncome dw 0
+    warning db "dosbox does not support 32 bits and above$"
+    choice db ?
     five dw 5
     ten dw 10
     hundred dw 100
     expensesArray dw 0, 0, 0, 0, 0
     groceriesSST dw ?
     groceriesBuffer dw 18, ?, 20 dup ("$")
-    groceriesTail dw 0  ;tail is different and fixed for every expense
-    groceriesExpenses dw 1234
+    groceriesTail dw 0
+    groceriesExpenses dw 0
+	vehicleBuffer dw 18, ?, 20 dup ("$")
+    vehicleTail dw 1
+    vehicleExpenses dw 0
+	accomodationBuffer dw 18, ?, 20 dup ("$")
+    accomodationTail dw 2
+    accomodationExpenses dw 0
     billsBuffer dw 18, ?, 20 dup ("$")
-    billsTail dw 1      ;tail is different and fixed for every expense
+    billsTail dw 1
     billsExpenses dw 0
+	insuranceBuffer dw 18, ?, 20 dup ("$")
+    insuranceTail dw 4
+    insuranceExpenses dw 0
     sumOfAllExpenses dw 0
-    newBalance dw 42069
+    newBalance dw 0
     currentBalance dw 0
     overallBudgetUsage dw ?
 
 .code
+
+promptForIncome:
+    lea di, incomeBuffer
+    lea si, promptIncome
+    mov singleInput, 0
+    call Prompt
+
+    NEW_LINE
+
+    lea si, incomeBuffer
+    lea di, currentIncome
+    call ConvertToNum
+
+Start:
+    lea di, choice
+    lea si, promptChoice
+    mov singleInput, 1
+    call Prompt
+
+    cmp choice, 1
+    je promptGroceriesExpenses
+    cmp choice, 2
+    je promptBillsExpenses
+
+;budgetusage = sum of all expenses in that area
+;(all expenses in one array)(done, use this)
 promptGroceriesExpenses:
     lea di, groceriesBuffer
     lea si, promptGroceries
@@ -38,21 +80,90 @@ promptGroceriesExpenses:
     mov bx, groceriesTail
     call InsertIntoExpensesArray
 
-promptBillsExpenses:
-    lea di, billsBuffer
-    lea si, PromptBills
+    CLEAR
+    call Start
+
+promptVehicleExpenses:
+    lea di, vehicleBuffer
+    lea si, promptVehicle
     mov singleInput, 0
     call Prompt
+
+    NEW_LINE
+
+    lea si, vehicleBuffer
+    lea di, vehicleExpenses
+    call ConvertToNum
+
+    lea si, expensesArray
+    mov ax, vehicleExpenses
+    mov bx, vehicleTail
+    call InsertIntoExpensesArray
+
+	CLEAR
+    call Start
+
+promptAccomodationExpenses:
+    lea di, accomodationBuffer
+    lea si, promptAccomodation
+    mov singleInput, 0
+    call Prompt
+
+    NEW_LINE
+
+    lea si, accomodationBuffer
+    lea di, accomodationExpenses
+    call ConvertToNum
+
+    lea si, expensesArray
+    mov ax, accomodationExpenses
+    mov bx, accomodationTail
+    call InsertIntoExpensesArray
+
+	CLEAR
+    call Start
+
+promptBillsExpenses:
+    lea di, billsBuffer
+    lea si, promptBills
+    mov singleInput, 0
+    call Prompt
+
+    CLEAR
 
     lea si, billsBuffer
     lea di, billsExpenses
     call ConvertToNum
 
-    lea si, expensesArray
+    lea si, expensesArray  ;load the address of the array into si, si is now pointing to the array
     mov ax, billsExpenses
     mov bx, billsTail
     call InsertIntoExpensesArray
 
+    CLEAR
+    call Start
+
+promptInsuranceExpenses:
+    lea di, insuranceBuffer
+    lea si, promptInsurance
+    mov singleInput, 0
+    call Prompt
+
+    NEW_LINE
+
+    lea si, insuranceBuffer
+    lea di, insuranceExpenses
+    call ConvertToNum
+
+    lea si, expensesArray
+    mov ax, insuranceExpenses
+    mov bx, insuranceTail
+    call InsertIntoExpensesArray
+
+	CLEAR
+    call Start
+
+    ;newbalance = currentbalance - expenses (done)
 SumAllExpenses:
     mov cx, 5
     mov ax, 0
@@ -69,6 +180,7 @@ CalculateNewBalance:
     sub ax, sumOfAllExpenses
     mov newBalance, ax
 
+    ;overallbudgetusage = sum of all expenses * 100 / previousbalance (forever wip)
     mov dx, 0
     mov ax, sumOfAllExpenses
     cmp ax, 655
@@ -77,7 +189,7 @@ CalculateNewBalance:
     div currentBalance
     mov overallBudgetUsage, ax
 
-    ;jmp end_program  ;no end_program here, so comment it first ;very sad time
+    ;jmp end_program  ;no end_program here, so comment it first
 
 warningMsg:
     CHANGE_COLOR 04h, warning
