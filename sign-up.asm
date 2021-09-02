@@ -2,7 +2,7 @@
 ;-------------------------------------user name-------------------------------------------------------------
     usernameInputMsg db "please enter and create your user name :  $"
     errorMsg db "incorrect user input (capital letters and numbers only) $"
-    username db 30,?,32 dup ("$")
+    username db 30, ?, 30 + 2 dup ("$")
     usernameHasNumber db 0
     usernameHasCapitalLetter db 0
     validUsername db 1
@@ -15,7 +15,7 @@
     inputPasswordMsg db "please enter your desired password [length = 10] : $"
     confirmPasswordMsg db "please confirm your password : $"
     finalConfirmationPasswordMsg db "thank you for your password comfirmation : $"
-    password db 30,?,32 dup("$")
+    password db 30, ?, 30 + 2 dup("$")
     incorrectPasswordMsg db  10,13,"your password is not in the correct form"
                db  10,13,"possible error:"
                db  10,13,"              1) not in 10 characters form"
@@ -29,6 +29,7 @@
 .code
 signup proc
     call ShowSignup
+    jmp FinalMsg
 
 ;------------------user name-------------------------------------------------------------------------------
 ;-----enter user name message
