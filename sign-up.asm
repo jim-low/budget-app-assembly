@@ -29,7 +29,6 @@
 .code
 signup proc
     call ShowSignup
-    jmp FinalMsg
 
 ;------------------user name-------------------------------------------------------------------------------
 ;-----enter user name message
