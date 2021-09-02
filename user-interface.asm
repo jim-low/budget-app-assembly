@@ -73,6 +73,13 @@ ShowMainMenu proc
     ret
 ShowMainMenu endp
 
+ShowTransactionMenu proc
+    lea si, signupBanner
+    mov dl, stringFlag
+    call display
+    ret
+ShowTransactionMenu endp
+
 ShowSignup proc
     lea si, signupBanner
     mov dl, stringFlag
