@@ -48,7 +48,9 @@ UserMsg:
 ValidateUsername:
     mov dl,username[bx+2]
     cmp dl,0dh
-    je FinalUserInput
+    jne ValidateNumbers
+    jmp FinalUserInput
+
 ValidateNumbers:
     cmp dl,'0'
     jl Error
@@ -83,7 +85,7 @@ Error:
 
 signUpExceed:
     NEW_LINE
-    lea si,inputExceedMsg 
+    lea si,inputExceedMsg
     mov dl,stringFlag
     call display
     mov inputCount,0
