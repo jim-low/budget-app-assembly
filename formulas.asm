@@ -20,13 +20,14 @@
     insuranceTail dw 4
 
     expensesArray dw 0, 0, 0, 0, 0
+    incomeTotal dw 0
 
-    groceriesExpenses dw 0
-    vehicleExpenses dw 0
-    accomodationExpenses dw 0
-    billsExpenses dw 0
-    insuranceExpenses dw 0
-    income dw 0
+    groceriesAmount dw 0
+    vehicleAmount dw 0
+    accomodationAmount dw 0
+    billsAmount dw 0
+    insuranceAmount dw 0
+    incomeAmount dw 0
 
     warning db "Dosbox Does Not Support 32 Bits And Above$"
     five dw 5
@@ -39,7 +40,7 @@
     overallBudgetUsage dw ?
 
 .code
-SumAllExpenses:
+SumExpensesArray proc
     mov cx, 5
     mov ax, 0
     lea si, expensesArray
@@ -63,28 +64,25 @@ CalculateNewBalance:
     div currentBalance
     mov overallBudgetUsage, ax
 
+SumExpensesArray endp
+
 warningMsg:
     CHANGE_COLOR 04h, warning
 
 CalculateGroceriesSST proc
-    mov ax, groceriesExpenses
+    mov ax, groceriesAmount
     mul five
     div hundred
     mov groceriesSST, ax
-    mov ax, groceriesExpenses
+    mov ax, groceriesAmount
     add ax, groceriesSST
-    mov groceriesExpenses, ax
+    mov groceriesAmount, ax
 
     ret
 CalculateGroceriesSST endp
 
-InsertIntoExpensesArray proc
-InsertIntoExpensesArr:
-    add [si+bx], ax
-    mov bx, 0
-    jmp EndInsertion
-
-EndInsertion:
+InsertIntoExpensesArray proc ; ax = actual amount, bx = array offset
+    add expensesArray[bx], ax
     ret
 InsertIntoExpensesArray endp
 
