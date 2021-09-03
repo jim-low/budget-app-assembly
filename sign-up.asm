@@ -95,7 +95,7 @@ signUpExceed:
     mov passwordHasNumber,0
     mov passwordHasUpperCase,0
     mov passwordHasLowerCase,0
-    jmp EndProgram ; for now
+    ret
 
 FinalUserInput:
     NEW_LINE

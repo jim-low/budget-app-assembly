@@ -20,7 +20,7 @@ SelectDisplayTotalExpensesPercentage:
     jmp ProgramStart
 
 SelectMainMenuExit:
-    call EndProgram
+    jmp EndProgram
 
 StartParseMainMenu:
     cmp choice, "1"
