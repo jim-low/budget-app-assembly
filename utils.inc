@@ -119,8 +119,8 @@ Backspace:
 PromptPassword endp
 
 ConvertToNum proc ; si = buffer, di = destination
-    mov bx, 2
     mov ax, 0
+    mov [di], ax
 Convert:
     mov dl, [si]
     cmp dl, 0dh
@@ -129,14 +129,12 @@ Convert:
     mov dx, 0
     mov ax, [di]
     mul ten
-    add si, bx
     add dx, [si]
     mov dh, 0
     sub dx, 30h
     add ax, dx
     mov [di], ax
     inc si
-    mov bx, 0
     jmp Convert
 
 EndConversion:
