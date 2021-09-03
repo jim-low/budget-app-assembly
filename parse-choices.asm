@@ -12,11 +12,11 @@ SelectRecordTransaction:
     jmp ProgramStart
 
 SelectDisplayTotalIncomePercentage:
-    call DisplayTotalIncomePercentage
+    ;call DisplayTotalIncomePercentage
     jmp ProgramStart
 
 SelectDisplayTotalExpensesPercentage:
-    call DisplayTotalExpensesPercentage
+    ;call DisplayTotalExpensesPercentage
     jmp ProgramStart
 
 SelectMainMenuExit:
@@ -62,4 +62,128 @@ StartParseRecordTransaction:
     je SelectTransactionExit
 
 ParseRecordTransaction endp
+
+ParseExpensesTransaction proc
+    jmp StartParseExpensesTransaction
+
+SelectBills:
+    lea si, promptBills
+    lea di, billsBuffer
+    mov singleInput, 0
+    call Prompt
+
+    lea si, billsBuffer + 2
+    lea di, billsAmount
+    call ConvertToNum
+
+    mov ax, billsAmount
+    mov dx, 0
+    mov dl, choice
+    sub dl, '0'
+    dec dl
+    mov bx, dx
+    call InsertIntoExpensesArray
+    jmp ProgramStart
+
+SelectInsurance:
+    lea si, promptInsurance
+    lea di, insuranceBuffer
+    mov singleInput, 0
+    call Prompt
+
+    lea si, insuranceBuffer + 2
+    lea di, insuranceAmount
+    call ConvertToNum
+
+    mov ax, insuranceAmount
+    mov dx, 0
+    mov dl, choice
+    sub dl, '0'
+    dec dl
+    mov bx, dx
+    call InsertIntoExpensesArray
+    jmp ProgramStart
+
+SelectExpensesBack:
+    ret
+
+StartParseExpensesTransaction:
+    cmp choice, "1"
+    je SelectGroceries
+
+    cmp choice, "2"
+    je SelectVehicle
+
+    cmp choice, "3"
+    je SelectAccomodation
+
+    cmp choice, "4"
+    je SelectBills
+
+    cmp choice, "5"
+    je SelectInsurance
+
+    cmp choice, "6"
+    je SelectExpensesBack
+
+SelectGroceries:
+    lea si, promptGroceries
+    lea di, groceriesBuffer
+    mov singleInput, 0
+    call Prompt
+
+    lea si, groceriesBuffer + 2
+    lea di, groceriesAmount
+    call ConvertToNum
+
+    call CalculateGroceriesSST
+
+    mov ax, groceriesAmount
+    mov dx, 0
+    mov dl, choice
+    sub dl, '0'
+    dec dl
+    mov bx, dx
+    call InsertIntoExpensesArray
+    jmp ProgramStart
+
+SelectVehicle:
+    lea si, promptVehicle
+    lea di, insuranceBuffer
+    mov singleInput, 0
+    call Prompt
+
+    lea si, insuranceBuffer + 2
+    lea di, insuranceAmount
+    call ConvertToNum
+
+    mov ax, insuranceAmount
+    mov dx, 0
+    mov dl, choice
+    sub dl, '0'
+    dec dl
+    mov bx, dx
+    call InsertIntoExpensesArray
+    jmp ProgramStart
+
+SelectAccomodation:
+    lea si, promptAccomodation
+    lea di, accomodationBuffer
+    mov singleInput, 0
+    call Prompt
+
+    lea si, accomodationBuffer + 2
+    lea di, accomodationAmount
+    call ConvertToNum
+
+    mov ax, accomodationAmount
+    mov dx, 0
+    mov dl, choice
+    sub dl, '0'
+    dec dl
+    mov bx, dx
+    call InsertIntoExpensesArray
+    jmp ProgramStart
+
+ParseExpensesTransaction endp
 
