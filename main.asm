@@ -37,6 +37,18 @@ RecordTransaction:
 
     ret
 
+ExpensesTransaction:
+    call ListExpenses
+
+    lea si, choicePrompt
+    lea di, choice
+    mov singleInput, 1
+    call Prompt
+
+    call ParseExpensesTransaction
+
+    ret
+
 ProgramStart:
     CLEAR
     call ShowMainMenu
