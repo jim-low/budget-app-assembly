@@ -118,7 +118,7 @@ Backspace:
 
 PromptPassword endp
 
-ConvertToNum proc
+ConvertToNum proc ; si = buffer, di = destination
     mov bx, 2
     mov ax, 0
 Convert:
