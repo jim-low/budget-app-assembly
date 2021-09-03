@@ -14,7 +14,7 @@
     include login.asm
     include formulas.asm
     include user-i~1.asm
-    include parseC~1.asm
+    include parse-~1.asm
 
 .code
 main proc
