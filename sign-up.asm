@@ -1,26 +1,26 @@
 .data
 ;-------------------------------------user name-------------------------------------------------------------
-    usernameInputMsg db "please enter and create your user name:  $"
-    errorMsg db "incorrect user input (capital letters and numbers only)$"
+    usernameInputMsg db "Please Enter And Create Your User Name:  $"
+    errorMsg db "Incorrect User Input (Capital Letters And Numbers Only)$"
     username db 30, ?, 30 + 2 dup ("$")
     usernameHasNumber db 0
     usernameHasCapitalLetter db 0
     validUsername db 1
-    usernameConfirmationMsg db "your user name is comfirmed >>> $"
-    inputExceedMsg db "You have exceeded the maximum amount of tries,please try again later$"
+    usernameConfirmationMsg db "Your User Name Is Confirmed >>> $"
+    inputExceedMsg db "You Have Exceeded The Maximum Amount Of Tries$"
     inputCount db 0
 ;-------------------------------------user name-------------------------------------------------------------
 
 ;-------------------------------------Password--------------------------------------------------------------
-    inputPasswordMsg db "please enter your desired password [length = 10] : $"
-    confirmPasswordMsg db "please confirm your password : $"
-    finalConfirmationPasswordMsg db "thank you for your password comfirmation : $"
+    inputPasswordMsg db "Please Enter Your Password [length = 10] : $"
+    confirmPasswordMsg db "Please Confirm Your Password : $"
+    finalConfirmationPasswordMsg db "Thank You For Your Password Confirmation$"
     password db 30 dup ("$")
-    incorrectPasswordMsg db  10,13,"your password is not in the correct form"
-                         db  10,13,"possible error:"
-                         db  10,13,"              1) not in 10 characters form"
-                         db  10,13,"              2) password must contain (uppercase,lowercase,number characters)"
-                         db  10,13,"              3) only characters metioned in 2) is acceptable$"
+    incorrectPasswordMsg db 10, 13, "Your Password Is Not In The Correct Form"
+                         db 10, 13, "Possible Errors:"
+                         db 10, 13, "              1) Not having a minimum of 10 characters"
+                         db 10, 13, "              2) Password Must Contain (Uppercase, Lowercase, and numbers)"
+                         db "$"
     passwordHasNumber db 0
     passwordHasLowerCase db 0
     passwordHasUpperCase db 0
@@ -29,7 +29,6 @@
 .code
 signup proc
     call ShowSignup
-    ;ret
 
 ;------------------user name-------------------------------------------------------------------------------
 ;-----enter user name message

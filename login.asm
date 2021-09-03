@@ -1,12 +1,12 @@
 .data
-    usernameLoginPrompt db 0dh, 0ah, 0dh, 0ah, '                  username : $'
-    passwordLoginPrompt db 0dh, 0ah, '                  password : $'
+    usernameLoginPrompt db 0dh, 0ah, 0dh, 0ah, "                  Username : $"
+    passwordLoginPrompt db 0dh, 0ah, "                  Password : $"
 
-    loginUsername db 30, ?, 32 dup ('$')
-    loginPassword db 30 dup ('$')
-    failed db 0dh, 0ah, 0dh, 0ah, '                 ! failed to log in ! ', 0dh, 0ah, '$'
-    success db 0dh, 0ah, 0dh, 0ah, '                - successfully log in - $'
-    exceeded db 0dh, 0ah, 0dh, 0ah, '  - failure over 5, please contact admin for further help -$'
+    loginUsername db 30, ?, 32 dup ("$")
+    loginPassword db 30 dup ("$")
+    failed db 0dh, 0ah, 0dh, 0ah, "                 ! Failed To Log In ! ", 0dh, 0ah, "$"
+    success db 0dh, 0ah, 0dh, 0ah, "                - Successfully Log In - $"
+    exceeded db 0dh, 0ah, 0dh, 0ah, "  - You have exceeded the maximum amount of tries. -$"
     count db 0
 
 .code
@@ -14,11 +14,10 @@ login proc
     call ShowLogin
 
 LoginStart:
-    cmp count, 5
+    cmp count, 3
     je Exceed
 
 Input:
-    ;display usernameLoginPrompt
     lea di, loginUsername
     lea si, usernameLoginPrompt
     mov singleInput, 0
@@ -42,7 +41,6 @@ PassUsername:
 Exceed:
     CHANGE_COLOR 04h, exceeded
 
-    ;display enter psw
 Psw:
     lea si, passwordLoginPrompt
     lea di, loginPassword
@@ -56,16 +54,16 @@ Psw:
 CheckPsw:
     mov al, [loginPassword+bx]
     cmp al, 0dh
-    je PasswordSuccessButIHaveNot
+    je LoginSuccess
     cmp al, [password+bx]
     jne Fail
     inc bx
     jmp CheckPsw
 
-PasswordSuccessButIHaveNot:
+LoginSuccess:
     CHANGE_COLOR 02h, success
     NEW_LINE
-    jmp EndProgram
+    ret
 
 Fail:
     CHANGE_COLOR 04h, failed
