@@ -23,6 +23,19 @@ main proc
 
     call SignUp
     call Login
+    jmp ProgramStart
+
+RecordTransaction:
+    call ShowTransactionMenu
+
+    lea si, choicePrompt
+    lea di, choice
+    mov singleInput, 1
+    call Prompt
+
+    call ParseRecordTransaction
+
+    ret
 
 ProgramStart:
     CLEAR
