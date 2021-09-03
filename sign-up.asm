@@ -184,7 +184,7 @@ ErrorPs:
 
 FinalMsg:
     lea si, password
-    mov encryptFlag, 1
+    mov encrypt, 1
     call cryptogramify
 
     NEW_LINE

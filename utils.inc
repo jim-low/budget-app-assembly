@@ -3,7 +3,7 @@
     charFlag db 0
     stringFlag db 1
     digitsFlag db 2
-    encryptFlag db 0
+    encrypt db ?
     secretKey db 69
 
 CLEAR macro ; to clear console screen
@@ -186,11 +186,11 @@ PrintDigits:
 
 Display endp
 
-Cryptogramify proc ; si = string to encrypt/decrypt, encryptFlag = boolean
+Cryptogramify proc ; si = string to encrypt/decrypt, encrypt = boolean
     mov ax, 0
     mov al, secretKey
 
-    cmp encryptFlag, 0
+    cmp encrypt, 0
     je SetSecretKey
     jmp CryptogramifyPassword
 

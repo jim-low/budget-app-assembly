@@ -47,7 +47,7 @@ Psw:
     call PromptPassword
 
     lea si, password
-    mov encryptFlag, 0
+    mov encrypt, 0
     call Cryptogramify
 
     mov bx, 0
