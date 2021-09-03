@@ -1,6 +1,2 @@
-.data
-    choice db ?
-
 .code
-
 
