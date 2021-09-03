@@ -41,7 +41,19 @@ ParseRecordTransaction proc
     jmp StartParseRecordTransaction
 
 SelectIncomeTransaction:
-    ; call income calculation from formulas.asm
+    lea si, promptIncome
+    lea di, incomeBuffer
+    mov singleInput, 0
+    call Prompt
+
+    lea si, incomeBuffer + 2
+    lea di, incomeAmount
+    call ConvertToNum
+
+    mov ax, incomeTotal
+    add ax, incomeAmount
+    mov incomeTotal, ax
+
     jmp ProgramStart
 
 SelectExpensesTransaction:
