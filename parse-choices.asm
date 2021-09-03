@@ -12,11 +12,15 @@ SelectRecordTransaction:
     jmp ProgramStart
 
 SelectDisplayTotalIncomePercentage:
-    ;call DisplayTotalIncomePercentage
+    call DisplayTotalIncomePercentage
+    mov ah, 01h
+    int 21h
     jmp ProgramStart
 
 SelectDisplayTotalExpensesPercentage:
-    ;call DisplayTotalExpensesPercentage
+    call DisplayTotalExpensesPercentage
+    mov ah, 01h
+    int 21h
     jmp ProgramStart
 
 SelectMainMenuExit:
@@ -53,6 +57,9 @@ SelectIncomeTransaction:
     mov ax, incomeTotal
     add ax, incomeAmount
     mov incomeTotal, ax
+
+    mov ax, incomeAmount
+    add newBalance, ax
 
     jmp ProgramStart
 
@@ -116,9 +123,6 @@ SelectInsurance:
     call InsertIntoExpensesArray
     jmp ProgramStart
 
-SelectExpensesBack:
-    ret
-
 StartParseExpensesTransaction:
     cmp choice, "1"
     je SelectGroceries
@@ -134,9 +138,7 @@ StartParseExpensesTransaction:
 
     cmp choice, "5"
     je SelectInsurance
-
-    cmp choice, "6"
-    je SelectExpensesBack
+    ret
 
 SelectGroceries:
     lea si, promptGroceries
