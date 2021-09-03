@@ -66,32 +66,7 @@ CalculateNewBalance:
 warningMsg:
     CHANGE_COLOR 04h, warning
 
-    ConvertToNum proc
-    mov bx, 2
-    mov ax, 0
-Convert:
-    mov dl, [si]
-    cmp dl, 0dh
-    je EndConversion
-
-    mov dx, 0
-    mov ax, [di]
-    mul ten
-    add si, bx
-    add dx, [si]
-    mov dh, 0
-    sub dx, 30h
-    add ax, dx
-    mov [di], ax
-    inc si
-    mov bx, 0
-    jmp Convert
-
-EndConversion:
-    ret
-    ConvertToNum endp
-
-    CalculateGroceriesSST proc
+CalculateGroceriesSST proc
     mov ax, groceriesExpenses
     mul five
     div hundred
@@ -101,9 +76,9 @@ EndConversion:
     mov groceriesExpenses, ax
 
     ret
-    CalculateGroceriesSST endp
+CalculateGroceriesSST endp
 
-    InsertIntoExpensesArray proc
+InsertIntoExpensesArray proc
 InsertIntoExpensesArr:
     add [si+bx], ax
     mov bx, 0

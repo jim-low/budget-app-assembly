@@ -118,6 +118,31 @@ Backspace:
 
 PromptPassword endp
 
+ConvertToNum proc
+    mov bx, 2
+    mov ax, 0
+Convert:
+    mov dl, [si]
+    cmp dl, 0dh
+    je EndConversion
+
+    mov dx, 0
+    mov ax, [di]
+    mul ten
+    add si, bx
+    add dx, [si]
+    mov dh, 0
+    sub dx, 30h
+    add ax, dx
+    mov [di], ax
+    inc si
+    mov bx, 0
+    jmp Convert
+
+EndConversion:
+    ret
+ConvertToNum endp
+
 Display proc ; si = value, dl = flag
     cmp dl, charFlag
     je DisplayChar
