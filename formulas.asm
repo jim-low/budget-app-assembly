@@ -4,7 +4,7 @@
     promptAccomodation db 0dh, 0ah, "Enter Your Accomodation Expenses: $"
     promptBills db 0dh, 0ah, "Enter Your Bills Expenses: $"
     promptInsurance db 0dh, 0ah, "Enter Your Insurance Expenses: $"
-    incomePrompt db 0dh, 0ah, "Enter Your Income For The Month: $"
+    promptIncome db 0dh, 0ah, "Enter Your Income For The Month: $"
 
     incomeBuffer dw 18, ?, 20 dup ("$")
     groceriesBuffer dw 18, ?, 20 dup ("$")
