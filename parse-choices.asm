@@ -37,3 +37,29 @@ StartParseMainMenu:
 
 ParseMainMenu endp
 
+ParseRecordTransaction proc
+    jmp StartParseRecordTransaction
+
+SelectIncomeTransaction:
+    ; call income calculation from formulas.asm
+    jmp ProgramStart
+
+SelectExpensesTransaction:
+    call ExpensesTransaction
+    jmp ProgramStart
+
+SelectTransactionExit:
+    jmp ProgramStart
+
+StartParseRecordTransaction:
+    cmp choice, "1"
+    je SelectIncomeTransaction
+
+    cmp choice, "2"
+    je SelectExpensesTransaction
+
+    cmp choice, "3"
+    je SelectTransactionExit
+
+ParseRecordTransaction endp
+
