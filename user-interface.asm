@@ -24,7 +24,7 @@
     transactionSelectionMenu db 10, 13, "                  =============== Selection =============="
                              db 10, 13, "                       1. Income Transaction"
                              db 10, 13, "                       2. Expenses Transaction"
-                             db 10, 13, "                       3. Exit"
+                             db 10, 13, "                       3. Back"
                              db 10, 13, "                  ========================================"
                              db "$"
 
@@ -34,7 +34,7 @@
                  db 10, 13, "                        3. Accomodation"
                  db 10, 13, "                        4. Bills"
                  db 10, 13, "                        5. Insurance"
-                 db 10, 13, "                        6. Exit"
+                 db 10, 13, "                        6. Back"
                  db 10, 13, "                     ============================="
                  db "$"
 
