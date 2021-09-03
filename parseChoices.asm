@@ -9,15 +9,15 @@ ParseMainMenu proc
 
 SelectRecordTransaction:
     call RecordTransaction
-    ret
+    jmp ProgramStart
 
 SelectDisplayTotalIncomePercentage:
     call DisplayTotalIncomePercentage
-    ret
+    jmp ProgramStart
 
 SelectDisplayTotalExpensesPercentage:
     call DisplayTotalExpensesPercentage
-    ret
+    jmp ProgramStart
 
 SelectMainMenuExit:
     call EndProgram
