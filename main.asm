@@ -6,8 +6,8 @@
     choiceErrorMsg db "clearly the list is only from 1 to 6, but you still went over it you donkey$"
     choicePrompt db "                             Enter your choice: $"
     choice db ?
-    TotalExpensesPercentageMsg db "Your total expenses percentage is 69420% lmao, you broke af$"
-    TotalIncomePercentageMsg db "Your total income percentage is 0% lmao$"
+    totalExpensesPercentageMsg db "Your total expenses percentage is 69420% lmao, you broke af$"
+    totalIncomePercentageMsg db "Your total income percentage is 0% lmao$"
 
     include utils.inc
     include sign-up.asm
@@ -47,6 +47,18 @@ ExpensesTransaction:
 
     call ParseExpensesTransaction
 
+    ret
+
+DisplayTotalIncomePercentage:
+    lea si, totalIncomePercentageMsg
+    mov dl, stringFlag
+    call Display
+    ret
+
+DisplayTotalExpensesPercentage:
+    lea si, totalExpensesPercentageMsg
+    mov dl, stringFlag
+    call Display
     ret
 
 ProgramStart:
