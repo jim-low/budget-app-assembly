@@ -54,7 +54,7 @@ SelectIncomeTransaction:
     mov incomeTotal, ax
 
     mov ax, incomeAmount
-    add newBalance, ax
+    add initialBalance, ax
 
     jmp ProgramStart
 

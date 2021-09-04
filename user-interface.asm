@@ -154,7 +154,7 @@ ShowUserInfo proc
     mov dl, stringFlag
     call display
 
-    lea si, newBalance
+    lea si, currentBalance
     mov dl, digitsFlag
     call display
 

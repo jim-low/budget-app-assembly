@@ -35,7 +35,7 @@
     hundred dw 100
     groceriesSST dw ?
     sumOfAllExpenses dw 0
-    newBalance dw 0
+    initialBalance dw 0
     currentBalance dw 0
     overallBudgetUsage dw ?
 
@@ -54,7 +54,7 @@ SumUp:
 CalculateNewBalance:
     mov ax, currentBalance
     sub ax, sumOfAllExpenses
-    mov newBalance, ax
+    mov initialBalance, ax
 
     mov dx, 0
     mov ax, sumOfAllExpenses
