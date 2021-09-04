@@ -28,14 +28,23 @@
                              db 10, 13, "                  ========================================"
                              db "$"
 
-    expensesMenu db 10, 13, "                      ========== Expenses ========="
-                 db 10, 13, "                        1. Groceries"
-                 db 10, 13, "                        2. Vehicle"
-                 db 10, 13, "                        3. Accomodation"
-                 db 10, 13, "                        4. Bills"
-                 db 10, 13, "                        5. Insurance"
-                 db 10, 13, "                        6. Back"
-                 db 10, 13, "                     ============================="
+
+    expensesBanner db 10, 13, "                  _____                                     "
+                   db 10, 13, "                 | ____|_  ___ __   ___ _ __  ___  ___  ___ "
+                   db 10, 13, "                 |  _| \ \/ / '_ \ / _ \ '_ \/ __|/ _ \/ __|"
+                   db 10, 13, "                 | |___ >  <| |_) |  __/ | | \__ \  __/\__ \"
+                   db 10, 13, "                 |_____/_/\_\ .__/ \___|_| |_|___/\___||___/"
+                   db 10, 13, "                            |_|                             "
+                   db "$"
+
+    expensesMenu db 10, 13, "                       ========== Selection ========="
+                 db 10, 13, "                         1. Groceries"
+                 db 10, 13, "                         2. Vehicle"
+                 db 10, 13, "                         3. Accomodation"
+                 db 10, 13, "                         4. Bills"
+                 db 10, 13, "                         5. Insurance"
+                 db 10, 13, "                         6. Back"
+                 db 10, 13, "                       ============================="
                  db "$"
 
     signupBanner db 10, 13, "          ___          _    _               _                      _"
@@ -158,6 +167,10 @@ ShowUserInfo proc
 ShowUserInfo endp
 
 ListExpenses proc
+    lea si, expensesBanner
+    mov dl, stringFlag
+    call display
+    NEW_LINE
     lea si, expensesMenu
     mov dl, stringFlag
     call display
