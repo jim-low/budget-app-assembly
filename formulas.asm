@@ -4,7 +4,7 @@
     promptAccomodation db 0dh, 0ah, "Enter Your Accomodation Expenses: $"
     promptBills db 0dh, 0ah, "Enter Your Bills Expenses: $"
     promptInsurance db 0dh, 0ah, "Enter Your Insurance Expenses: $"
-    incomePrompt db 0dh, 0ah, "Enter Your Income For The Month: $"
+    promptIncome db 0dh, 0ah, "Enter Your Income For The Month: $"
 
     incomeBuffer dw 18, ?, 20 dup ("$")
     groceriesBuffer dw 18, ?, 20 dup ("$")
@@ -20,13 +20,14 @@
     insuranceTail dw 4
 
     expensesArray dw 0, 0, 0, 0, 0
+    incomeTotal dw 0
 
-    groceriesExpenses dw 0
-    vehicleExpenses dw 0
-    accomodationExpenses dw 0
-    billsExpenses dw 0
-    insuranceExpenses dw 0
-    income dw 0
+    groceriesAmount dw 0
+    vehicleAmount dw 0
+    accomodationAmount dw 0
+    billsAmount dw 0
+    insuranceAmount dw 0
+    incomeAmount dw 0
 
     warning db "Dosbox Does Not Support 32 Bits And Above$"
     five dw 5
@@ -39,7 +40,7 @@
     overallBudgetUsage dw ?
 
 .code
-SumAllExpenses:
+SumExpensesArray proc
     mov cx, 5
     mov ax, 0
     lea si, expensesArray
@@ -63,53 +64,25 @@ CalculateNewBalance:
     div currentBalance
     mov overallBudgetUsage, ax
 
+SumExpensesArray endp
+
 warningMsg:
     CHANGE_COLOR 04h, warning
 
-    ConvertToNum proc
-    mov bx, 2
-    mov ax, 0
-Convert:
-    mov dl, [si]
-    cmp dl, 0dh
-    je EndConversion
-
-    mov dx, 0
-    mov ax, [di]
-    mul ten
-    add si, bx
-    add dx, [si]
-    mov dh, 0
-    sub dx, 30h
-    add ax, dx
-    mov [di], ax
-    inc si
-    mov bx, 0
-    jmp Convert
-
-EndConversion:
-    ret
-    ConvertToNum endp
-
-    CalculateGroceriesSST proc
-    mov ax, groceriesExpenses
+CalculateGroceriesSST proc
+    mov ax, groceriesAmount
     mul five
     div hundred
     mov groceriesSST, ax
-    mov ax, groceriesExpenses
+    mov ax, groceriesAmount
     add ax, groceriesSST
-    mov groceriesExpenses, ax
+    mov groceriesAmount, ax
 
     ret
-    CalculateGroceriesSST endp
+CalculateGroceriesSST endp
 
-    InsertIntoExpensesArray proc
-InsertIntoExpensesArr:
-    add [si+bx], ax
-    mov bx, 0
-    jmp EndInsertion
-
-EndInsertion:
+InsertIntoExpensesArray proc ; ax = actual amount, bx = array offset
+    add expensesArray[bx], ax
     ret
 InsertIntoExpensesArray endp
 

@@ -3,7 +3,7 @@
     charFlag db 0
     stringFlag db 1
     digitsFlag db 2
-    encryptFlag db 0
+    encrypt db ?
     secretKey db 69
 
 CLEAR macro ; to clear console screen
@@ -118,6 +118,29 @@ Backspace:
 
 PromptPassword endp
 
+ConvertToNum proc ; si = buffer, di = destination
+    mov ax, 0
+    mov [di], ax
+Convert:
+    mov dl, [si]
+    cmp dl, 0dh
+    je EndConversion
+
+    mov dx, 0
+    mov ax, [di]
+    mul ten
+    add dx, [si]
+    mov dh, 0
+    sub dx, 30h
+    add ax, dx
+    mov [di], ax
+    inc si
+    jmp Convert
+
+EndConversion:
+    ret
+ConvertToNum endp
+
 Display proc ; si = value, dl = flag
     cmp dl, charFlag
     je DisplayChar
@@ -161,11 +184,11 @@ PrintDigits:
 
 Display endp
 
-Cryptogramify proc ; si = string to encrypt/decrypt, encryptFlag = boolean
+Cryptogramify proc ; si = string to encrypt/decrypt, encrypt = boolean
     mov ax, 0
     mov al, secretKey
 
-    cmp encryptFlag, 0
+    cmp encrypt, 0
     je SetSecretKey
     jmp CryptogramifyPassword
 
