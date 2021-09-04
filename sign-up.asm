@@ -1,38 +1,39 @@
 .data
 ;-------------------------------------user name-------------------------------------------------------------
-    usernameInputMsg db "Please Enter And Create Your User Name:  $"
-    errorMsg db "Incorrect User Input (Capital Letters And Numbers Only)$"
+    usernameInputMsg db "               Please Enter Your Username: $"
+    errorMsg db "          Incorrect Username Format (Capital Letters And Numbers Only)$"
     username db 30, ?, 30 + 2 dup ("$")
     usernameHasNumber db 0
     usernameHasCapitalLetter db 0
     validUsername db 1
-    usernameConfirmationMsg db "Your User Name Is Confirmed >>> $"
-    inputExceedMsg db "You Have Exceeded The Maximum Amount Of Tries$"
+    inputExceedMsg db "You Have Exceeded The Maximum Amount Of Tries :($"
     inputCount db 0
 ;-------------------------------------user name-------------------------------------------------------------
 
 ;-------------------------------------Password--------------------------------------------------------------
-    inputPasswordMsg db "Please Enter Your Password [length = 10] : $"
-    confirmPasswordMsg db "Please Confirm Your Password : $"
-    finalConfirmationPasswordMsg db "Thank You For Your Password Confirmation$"
+    inputPasswordMsg db "               Please Enter Your Password [length = 10]: $"
     password db 30 dup ("$")
-    incorrectPasswordMsg db 10, 13, "Your Password Is Not In The Correct Form"
-                         db 10, 13, "Possible Errors:"
-                         db 10, 13, "              1) Not having a minimum of 10 characters"
-                         db 10, 13, "              2) Password Must Contain (Uppercase, Lowercase, and numbers)"
+    incorrectPasswordMsg db 10, 13, "          Your Password Is Not In The Correct Form"
+                         db 10, 13, "          Possible Errors:"
+                         db 10, 13, "             1) Not having a minimum of 10 characters"
+                         db 10, 13, "             2) Password Must Contain (Uppercase, Lowercase, and numbers)"
                          db "$"
     passwordHasNumber db 0
     passwordHasLowerCase db 0
     passwordHasUpperCase db 0
+
+    successfulSignup db "                          -- Successfully Signed Up! --$"
 ;-------------------------------------password-------------------------------------------------------------
 
 .code
 signup proc
+    CLEAR
     call ShowSignup
 
 ;------------------user name-------------------------------------------------------------------------------
 ;-----enter user name message
 UserMsg:
+    NEW_LINE
     NEW_LINE
 
     lea di, username
@@ -49,7 +50,7 @@ ValidateUsername:
     mov dl,username[bx+2]
     cmp dl,0dh
     jg ValidateNumbers
-    jmp FinalUserInput
+    jmp InputPassword
 
 ValidateNumbers:
     cmp dl,'0'
@@ -97,22 +98,10 @@ signUpExceed:
     mov passwordHasLowerCase,0
     ret
 
-FinalUserInput:
-    NEW_LINE
-
-    lea si, usernameConfirmationMsg
-    mov dl, stringFlag
-    call display
-
-    lea si, username + 2
-    mov dl, stringFlag
-    call display
-
-    NEW_LINE
-
 ;------------------user name---------------------------------------------------------------------------
 ;------------------password----------------------------------------------------------------------------
 InputPassword:
+    NEW_LINE
     lea si, inputPasswordMsg
     lea di, password
     call PromptPassword
@@ -188,14 +177,15 @@ FinalMsg:
     call cryptogramify
 
     NEW_LINE
+    NEW_LINE
 
-    lea si, finalConfirmationPasswordMsg
-    mov dl, stringFlag
-    call display
+    CHANGE_COLOR 02h, successfulSignup
 
-    lea si, password
-    mov dl, stringFlag
-    call display
+    NEW_LINE
+    NEW_LINE
+
+    PRESS_ANY_KEY
+
     ret
 
 signup endp

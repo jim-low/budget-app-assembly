@@ -1,16 +1,22 @@
 .data
-    usernameLoginPrompt db 0dh, 0ah, 0dh, 0ah, "                  Username : $"
-    passwordLoginPrompt db 0dh, 0ah, "                  Password : $"
+    usernameLoginPrompt db "                             Username: $"
+    passwordLoginPrompt db "                             Password: $"
 
     loginUsername db 30, ?, 32 dup ("$")
     loginPassword db 30 dup ("$")
-    failed db 0dh, 0ah, 0dh, 0ah, "                 ! Failed To Log In ! ", 0dh, 0ah, "$"
-    success db 0dh, 0ah, 0dh, 0ah, "                - Successfully Log In - $"
-    exceeded db 0dh, 0ah, 0dh, 0ah, "  - You have exceeded the maximum amount of tries. -$"
+    failed db "                              ! Failed To Log In D: !$"
+    success db "                           -- Successfully Logged In! -- $"
+    exceeded db "  - You have exceeded the maximum amount of tries. -$"
     count db 0
 
 .code
 login proc
+    CLEAR
+
+    lea si, password
+    mov encrypt, 0
+    call Cryptogramify
+
     call ShowLogin
 
 LoginStart:
@@ -18,12 +24,12 @@ LoginStart:
     je Exceed
 
 Input:
+    NEW_LINE
+    NEW_LINE
     lea di, loginUsername
     lea si, usernameLoginPrompt
     mov singleInput, 0
     call Prompt
-
-    NEW_LINE
 
     mov bx, 0
 CheckUsername:
@@ -42,13 +48,11 @@ Exceed:
     CHANGE_COLOR 04h, exceeded
 
 Psw:
+    NEW_LINE
+    NEW_LINE
     lea si, passwordLoginPrompt
     lea di, loginPassword
     call PromptPassword
-
-    lea si, password
-    mov encrypt, 0
-    call Cryptogramify
 
     mov bx, 0
 CheckPsw:
@@ -61,11 +65,21 @@ CheckPsw:
     jmp CheckPsw
 
 LoginSuccess:
-    CHANGE_COLOR 02h, success
     NEW_LINE
+    NEW_LINE
+
+    CHANGE_COLOR 02h, success
+
+    NEW_LINE
+    NEW_LINE
+
+    PRESS_ANY_KEY
     ret
 
 Fail:
+    NEW_LINE
+    NEW_LINE
+
     CHANGE_COLOR 04h, failed
     inc count
     jmp LoginStart
