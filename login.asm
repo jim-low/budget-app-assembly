@@ -12,6 +12,11 @@
 .code
 login proc
     CLEAR
+
+    lea si, password
+    mov encrypt, 0
+    call Cryptogramify
+
     call ShowLogin
 
 LoginStart:
@@ -48,10 +53,6 @@ Psw:
     lea si, passwordLoginPrompt
     lea di, loginPassword
     call PromptPassword
-
-    lea si, password
-    mov encrypt, 0
-    call Cryptogramify
 
     mov bx, 0
 CheckPsw:
