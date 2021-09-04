@@ -5,6 +5,7 @@
     digitsFlag db 2
     encrypt db ?
     secretKey db 69
+    continueMsg db "                          Press Any Key To Continue...$"
 
 CLEAR macro ; to clear console screen
     mov ax, 0003h
@@ -18,6 +19,15 @@ NEW_LINE macro
 
     mov dl, 0ah
     mov ah, 02h
+    int 21h
+endm
+
+PRESS_ANY_KEY macro
+    lea dx, continueMsg
+    mov ah, 09h
+    int 21h
+
+    mov ah, 07h
     int 21h
 endm
 
