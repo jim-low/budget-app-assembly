@@ -26,7 +26,11 @@ main proc
     jmp ProgramStart
 
 RecordTransaction:
+    CLEAR
+
     call ShowTransactionMenu
+
+    NEW_LINE
 
     lea si, choicePrompt
     lea di, choice
@@ -38,7 +42,11 @@ RecordTransaction:
     ret
 
 ExpensesTransaction:
+    CLEAR
+
     call ListExpenses
+
+    NEW_LINE
 
     lea si, choicePrompt
     lea di, choice
