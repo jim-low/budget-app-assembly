@@ -32,8 +32,12 @@
     warning db "Dosbox Does Not Support 32 Bits And Above$"
     five dw 5
     ten dw 10
+	ten2 db 10
     hundred dw 100
+	remainder db ?
+	quotient db ?
     groceriesSST dw ?
+	roundupSST dw ?
     sumOfAllExpenses dw 0
     newBalance dw 0
     currentBalance dw 0
@@ -68,16 +72,85 @@ SumExpensesArray endp
 
 warningMsg:
     CHANGE_COLOR 04h, warning
+	
+PromptConvertInsert proc
+    ;di = buffer, si = prompt, bx = specific expense amount, cx = 1(has SST) or 0(no SST)
+    mov singleInput, 0
+    call Prompt
+
+    NEW_LINE
+	add di, 2
+    mov si, di
+	mov di, bx
+    call ConvertToNum
+	cmp cx, 1
+	jne Continue
+    call CalculateGroceriesSST
+	
+Continue:
+	mov ax, [di]
+	mov dl, choice
+    sub dl, 30h
+    dec dl
+    mov bx, dx
+    call InsertIntoExpensesArray
+	ret
+
+PromptConvertInsert endp
+	
+CompareAmountAndCalculatePercentage proc
+	mov ax, [si] ;si = total (income/expenses), di = percentage, bx = initial (income/expenses) 
+	cmp ax, bx  ;ax < bx
+	jb MultiplyFirst ;total < initial
+	div bx           ;(total / initial)* 100
+	mul hundred
+	jmp EndOfCalculating
+	
+MultiplyFirst:  ;(total * 100) / initial
+    mul hundred
+	div bx
+	
+EndOfCalculating:
+    mov [di], ax
+    ret
+CompareAmountAndCalculatePercentage endp
+	
+UpdateBalance proc
+    ;bx = 0(income)/1(expenses), si = currentBalance, di = specific expense / incomeAccount
+    cmp bx, 1
+	je UpdateIncome
+	mov ax, [si]
+	sub ax, [di]
+	mov [si], ax
+	jmp EndOfUpdate
+	
+UpdateIncome:
+    mov ax, [si]
+	add ax, [di]
+	mov [si], ax
+	
+EndOfUpdate:
+    ret
+UpdateBalance endp
 
 CalculateGroceriesSST proc
     mov ax, groceriesAmount
     mul five
     div hundred
     mov groceriesSST, ax
+	mov roundupSST, ax
+	mov ax, dx
+	div ten2
+	mov remainder, ah
+	mov quotient, al
+	cmp quotient, 5
+	jb EndOfCalculation
+	inc roundupSST
+	
+EndOfCalculation:
     mov ax, groceriesAmount
-    add ax, groceriesSST
+    add ax, roundupSST
     mov groceriesAmount, ax
-
     ret
 CalculateGroceriesSST endp
 
