@@ -96,10 +96,7 @@ EndProgram:
 main endp
 
 PromptInitialBalance proc
-    lea si, initialBalancePrompt
-    lea di, initialBalanceBuffer
-    mov singleInput, 0
-    call Prompt
+    call ShowInitialBalanceScreen
 
     lea si, initialBalanceBuffer + 2
     lea di, initialBalance
