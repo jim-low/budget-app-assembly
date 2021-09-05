@@ -236,9 +236,9 @@ ShowInitialBalanceScreen proc
     mov ah, 2
     int 10h
 
-    lea dx, balanceFormat
-    mov ah, 09h
-    int 21h
+    lea si, balanceFormat
+    mov dl, stringFlag
+    call Display
 
     ret
 ShowInitialBalanceScreen endp
