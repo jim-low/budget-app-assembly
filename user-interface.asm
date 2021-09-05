@@ -62,6 +62,11 @@
                 db 10, 13, "                    |___/                                                "
                 db "$"
 
+    initialBalanceMsg db 10, 13, "           _                      ___              _"
+                      db 10, 13, "          |_.__|_ _ ._ \_/_    ._  | ._ o_|_o _.| |_) _.| _.._  _ _"
+                      db 10, 13, "          |_| ||_(/_|   |(_)|_||  _|_| || |_|(_|| |_)(_||(_|| |(_(/_"
+                      db "$"
+
     exitMsg db 10, 13, "             ______ _                    _      _"
             db 10, 13, "            (_) |  | |                  | |    (_|   |"
             db 10, 13, "                |  | |     __,   _  _   | |      |   |  __"
@@ -209,4 +214,32 @@ ShowExitScreen proc
 
     ret
 ShowExitScreen endp
+
+ShowInitialBalanceScreen proc
+    CLEAR
+
+    mov dh, 4
+    mov dl, 5
+    mov bh, 0
+    mov ah, 2
+    int 10h
+
+    lea si, initialBalanceMsg
+    mov dl, stringFlag
+    call Display
+
+    NEW_LINE
+
+    mov dh, 14
+    mov dl, 29
+    mov bh, 0
+    mov ah, 2
+    int 10h
+
+    lea dx, balanceFormat
+    mov ah, 09h
+    int 21h
+
+    ret
+ShowInitialBalanceScreen endp
 
