@@ -98,6 +98,10 @@ main endp
 PromptInitialBalance proc
     call ShowInitialBalanceScreen
 
+    lea dx, initialBalanceBuffer
+    mov ah, 0ah
+    int 21h
+
     lea si, initialBalanceBuffer + 2
     lea di, initialBalance
     call ConvertToNum
@@ -106,6 +110,5 @@ PromptInitialBalance proc
     mov currentBalance, ax
     ret
 PromptInitialBalance endp
-
 end main
 
