@@ -3,11 +3,16 @@
 .data
     departMsg db "Thank you for the headache-inducing assignment and the painful torture of learning the Assembly Language"
               db 13, 10, "We are not grateful and forever resentful. :D$"
+
     choiceErrorMsg db "clearly the list is only from 1 to 6, but you still went over it you donkey$"
     choicePrompt db "                             Enter your choice: $"
     choice db ?
+
     totalExpensesPercentageMsg db "Your total expenses percentage is 69420% lmao, you broke af$"
     totalIncomePercentageMsg db "Your total income percentage is 0% lmao$"
+
+    initialBalancePrompt db "Please Enter Your Current Balance: $"
+    initialBalanceBuffer db 18, ?, 20 dup ("$")
 
     include utils.inc
     include sign-up.asm
@@ -23,6 +28,10 @@ main proc
 
     call SignUp
     call Login
+
+    CLEAR
+    call PromptInitialBalance
+
     jmp ProgramStart
 
 RecordTransaction:
@@ -91,5 +100,21 @@ EndProgram:
     int 21h
 
 main endp
+
+PromptInitialBalance proc
+    lea si, initialBalancePrompt
+    lea di, initialBalanceBuffer
+    mov singleInput, 0
+    call Prompt
+
+    lea si, initialBalanceBuffer + 2
+    lea di, initialBalance
+    call ConvertToNum
+
+    mov ax, initialBalance
+    mov currentBalance, ax
+    ret
+PromptInitialBalance endp
+
 end main
 
