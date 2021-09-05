@@ -18,9 +18,6 @@ SelectDisplayTotalExpensesPercentage:
     int 21h
     jmp ProgramStart
 
-SelectMainMenuExit:
-    jmp EndProgram
-
 StartParseMainMenu:
     cmp choice, "1"
     je SelectRecordTransaction
@@ -31,8 +28,7 @@ StartParseMainMenu:
     cmp choice, "3"
     je SelectDisplayTotalExpensesPercentage
 
-    cmp choice, "4"
-    je SelectMainMenuExit
+    jmp EndProgram
 
 ParseMainMenu endp
 
@@ -58,14 +54,11 @@ SelectIncomeTransaction:
 
     NEW_LINE
     PRESS_ANY_KEY
-    jmp ProgramStart
+    jmp RecordTransaction
 
 SelectExpensesTransaction:
     call ExpensesTransaction
-    jmp ProgramStart
-
-SelectTransactionExit:
-    jmp ProgramStart
+    jmp RecordTransaction
 
 StartParseRecordTransaction:
     cmp choice, "1"
@@ -73,9 +66,7 @@ StartParseRecordTransaction:
 
     cmp choice, "2"
     je SelectExpensesTransaction
-
-    cmp choice, "3"
-    je SelectTransactionExit
+    ret
 
 ParseRecordTransaction endp
 
@@ -97,7 +88,7 @@ SelectBills:
     call UpdateBalance
 
     PRESS_ANY_KEY
-    jmp ProgramStart
+    jmp ExpensesTransaction
 
 SelectInsurance:
     lea si, promptInsurance
@@ -112,7 +103,7 @@ SelectInsurance:
     call UpdateBalance
 
     PRESS_ANY_KEY
-    jmp ProgramStart
+    jmp ExpensesTransaction
 
 StartParseExpensesTransaction:
     cmp choice, "1"
@@ -129,7 +120,7 @@ StartParseExpensesTransaction:
 
     cmp choice, "5"
     je SelectInsurance
-    ret
+    jmp RecordTransaction
 
 SelectGroceries:
     lea si, promptGroceries
@@ -144,7 +135,7 @@ SelectGroceries:
     call UpdateBalance
 
     PRESS_ANY_KEY
-    jmp ProgramStart
+    jmp ExpensesTransaction
 
 SelectVehicle:
     lea si, promptVehicle
@@ -159,7 +150,7 @@ SelectVehicle:
     call UpdateBalance
 
     PRESS_ANY_KEY
-    jmp ProgramStart
+    jmp ExpensesTransaction
 
 SelectAccomodation:
     lea si, promptAccomodation
@@ -174,7 +165,7 @@ SelectAccomodation:
     call UpdateBalance
 
     PRESS_ANY_KEY
-    jmp ProgramStart
+    jmp ExpensesTransaction
 
 ParseExpensesTransaction endp
 
