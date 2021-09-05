@@ -218,7 +218,7 @@ ShowExitScreen endp
 ShowInitialBalanceScreen proc
     CLEAR
 
-    mov dh, 4
+    mov dh, 8
     mov dl, 5
     mov bh, 0
     mov ah, 2
