@@ -62,6 +62,22 @@
                 db 10, 13, "                    |___/                                                "
                 db "$"
 
+    exitMsg db 10, 13, "             ______ _                    _      _"
+            db 10, 13, "            (_) |  | |                  | |    (_|   |"
+            db 10, 13, "                |  | |     __,   _  _   | |      |   |  __"
+            db 10, 13, "              _ |  |/ \   /  |  / |/ |  |/_)     |   | /  \_|   |"
+            db 10, 13, "             (_/   |   |_/\_/|_/  |  |_/| \_/     \_/|/\__/  \_/|_/"
+            db 10, 13, "                                                    /|"
+            db 10, 13, "                                                    \|"
+            db 10, 13, "             _                        ,__ __                _"
+            db 10, 13, "            (_|   |_/                /|  |  |              | |    |"
+            db 10, 13, "              |   | _   ,_            |  |  |          __  | |    |"
+            db 10, 13, "              |   ||/  /  |  |   |    |  |  |  |   |  /    |/ \   |"
+            db 10, 13, "               \_/ |__/   |_/ \_/|/   |  |  |_/ \_/|_/\___/|   |_/o"
+            db 10, 13, "                                /|"
+            db 10, 13, "                                \|"
+            db "$"
+
     userDecoration db " +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+$"
     usernameFormat db "Username: $"
     balanceFormat db "Balance: RM$"
@@ -177,4 +193,20 @@ ListExpenses proc
     call display
     ret
 ListExpenses endp
+
+ShowExitScreen proc
+    CLEAR
+
+    mov dh, 4
+    mov dl, 5
+    mov bh, 0
+    mov ah, 2
+    int 10h
+
+    lea si, exitMsg
+    mov dl, stringFlag
+    call Display
+
+    ret
+ShowExitScreen endp
 
