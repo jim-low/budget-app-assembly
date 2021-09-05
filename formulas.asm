@@ -1,10 +1,10 @@
 .data
-    promptGroceries db "Enter Your Groceries Expenses: $"
-    promptVehicle db "Enter Your Vehicle Expenses: $"
-    promptAccomodation db "Enter Your Accomodation Expenses: $"
-    promptBills db "Enter Your Bills Expenses: $"
-    promptInsurance db "Enter Your Insurance Expenses: $"
-    promptIncome db "Enter Your Income For The Month: $"
+    promptGroceries db "                       Enter Your Groceries Expenses: RM$"
+    promptVehicle db "                       Enter Your Vehicle Expenses: RM$"
+    promptAccomodation db "                       Enter Your Accomodation Expenses: RM$"
+    promptBills db "                       Enter Your Bills Expenses: RM$"
+    promptInsurance db "                       Enter Your Insurance Expenses: RM$"
+    promptIncome db "                    Enter Your Income For The Month: RM$"
 
     incomeBuffer dw 18, ?, 20 dup ("$")
     groceriesBuffer dw 18, ?, 20 dup ("$")
