@@ -40,6 +40,8 @@ ParseRecordTransaction proc
     jmp StartParseRecordTransaction
 
 SelectIncomeTransaction:
+    NEW_LINE
+    NEW_LINE
     lea si, promptIncome
     lea di, incomeBuffer
     mov singleInput, 0
@@ -54,6 +56,8 @@ SelectIncomeTransaction:
     mov bx, 1
     call UpdateBalance
 
+    NEW_LINE
+    PRESS_ANY_KEY
     jmp ProgramStart
 
 SelectExpensesTransaction:
@@ -76,6 +80,8 @@ StartParseRecordTransaction:
 ParseRecordTransaction endp
 
 ParseExpensesTransaction proc
+    NEW_LINE
+    NEW_LINE
     jmp StartParseExpensesTransaction
 
 SelectBills:
@@ -90,6 +96,7 @@ SelectBills:
     mov bx, 0
     call UpdateBalance
 
+    PRESS_ANY_KEY
     jmp ProgramStart
 
 SelectInsurance:
@@ -104,6 +111,7 @@ SelectInsurance:
     mov bx, 0
     call UpdateBalance
 
+    PRESS_ANY_KEY
     jmp ProgramStart
 
 StartParseExpensesTransaction:
@@ -135,6 +143,7 @@ SelectGroceries:
     mov bx, 0
     call UpdateBalance
 
+    PRESS_ANY_KEY
     jmp ProgramStart
 
 SelectVehicle:
@@ -149,6 +158,7 @@ SelectVehicle:
     mov bx, 0
     call UpdateBalance
 
+    PRESS_ANY_KEY
     jmp ProgramStart
 
 SelectAccomodation:
@@ -163,6 +173,7 @@ SelectAccomodation:
     mov bx, 0
     call UpdateBalance
 
+    PRESS_ANY_KEY
     jmp ProgramStart
 
 ParseExpensesTransaction endp
