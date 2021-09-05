@@ -1,3 +1,8 @@
+.data
+    MAIN_MENU_MAX db "5"
+    TRANSACTION_MENU_MAX db "4"
+    EXPENSES_MENU_MAX db "7"
+
 .code
 ParseMainMenu proc
     jmp StartParseMainMenu
@@ -8,17 +13,25 @@ SelectRecordTransaction:
 
 SelectDisplayTotalIncomePercentage:
     call DisplayTotalIncomePercentage
-    mov ah, 01h
-    int 21h
+    PRESS_ANY_KEY
     jmp ProgramStart
 
 SelectDisplayTotalExpensesPercentage:
     call DisplayTotalExpensesPercentage
-    mov ah, 01h
-    int 21h
+    PRESS_ANY_KEY
+    jmp ProgramStart
+
+MainMenuOutOfRange:
     jmp ProgramStart
 
 StartParseMainMenu:
+    cmp choice, "0"
+    jle MainMenuOutOfRange
+
+    mov dl, MAIN_MENU_MAX
+    cmp choice, dl
+    jge MainMenuOutOfRange
+
     cmp choice, "1"
     je SelectRecordTransaction
 
@@ -58,9 +71,18 @@ SelectIncomeTransaction:
 
 SelectExpensesTransaction:
     call ExpensesTransaction
+
+RecordTransactionOutOfRange:
     jmp RecordTransaction
 
 StartParseRecordTransaction:
+    cmp choice, "0"
+    jle RecordTransactionOutOfRange
+
+    mov dl, TRANSACTION_MENU_MAX
+    cmp choice, dl
+    jge RecordTransactionOutOfRange
+
     cmp choice, "1"
     je SelectIncomeTransaction
 
@@ -87,8 +109,7 @@ SelectBills:
     mov bx, 0
     call UpdateBalance
 
-    PRESS_ANY_KEY
-    jmp ExpensesTransaction
+    jmp RestartExpensesTransaction
 
 SelectInsurance:
     lea si, promptInsurance
@@ -102,10 +123,19 @@ SelectInsurance:
     mov bx, 0
     call UpdateBalance
 
-    PRESS_ANY_KEY
+    jmp RestartExpensesTransaction
+
+ExpensesTransactionOutOfRange:
     jmp ExpensesTransaction
 
 StartParseExpensesTransaction:
+    cmp choice, "0"
+    jle ExpensesTransactionOutOfRange
+
+    mov dl, EXPENSES_MENU_MAX
+    cmp choice, dl
+    jge ExpensesTransactionOutOfRange
+
     cmp choice, "1"
     je SelectGroceries
 
@@ -120,6 +150,7 @@ StartParseExpensesTransaction:
 
     cmp choice, "5"
     je SelectInsurance
+
     jmp RecordTransaction
 
 SelectGroceries:
@@ -134,8 +165,7 @@ SelectGroceries:
     mov bx, 0
     call UpdateBalance
 
-    PRESS_ANY_KEY
-    jmp ExpensesTransaction
+    jmp RestartExpensesTransaction
 
 SelectVehicle:
     lea si, promptVehicle
@@ -149,8 +179,7 @@ SelectVehicle:
     mov bx, 0
     call UpdateBalance
 
-    PRESS_ANY_KEY
-    jmp ExpensesTransaction
+    jmp RestartExpensesTransaction
 
 SelectAccomodation:
     lea si, promptAccomodation
@@ -164,6 +193,7 @@ SelectAccomodation:
     mov bx, 0
     call UpdateBalance
 
+RestartExpensesTransaction:
     PRESS_ANY_KEY
     jmp ExpensesTransaction
 
