@@ -1,3 +1,8 @@
+.data
+    MAIN_MENU_MAX db "5"
+    TRANSACTION_MENU_MAX db "4"
+    EXPENSES_MENU_MAX db "7"
+
 .code
 ParseMainMenu proc
     jmp StartParseMainMenu
@@ -8,20 +13,25 @@ SelectRecordTransaction:
 
 SelectDisplayTotalIncomePercentage:
     call DisplayTotalIncomePercentage
-    mov ah, 01h
-    int 21h
+    PRESS_ANY_KEY
     jmp ProgramStart
 
 SelectDisplayTotalExpensesPercentage:
     call DisplayTotalExpensesPercentage
-    mov ah, 01h
-    int 21h
+    PRESS_ANY_KEY
     jmp ProgramStart
 
-SelectMainMenuExit:
-    jmp EndProgram
+MainMenuOutOfRange:
+    jmp ProgramStart
 
 StartParseMainMenu:
+    cmp choice, "0"
+    jle MainMenuOutOfRange
+
+    mov dl, MAIN_MENU_MAX
+    cmp choice, dl
+    jge MainMenuOutOfRange
+
     cmp choice, "1"
     je SelectRecordTransaction
 
@@ -31,8 +41,7 @@ StartParseMainMenu:
     cmp choice, "3"
     je SelectDisplayTotalExpensesPercentage
 
-    cmp choice, "4"
-    je SelectMainMenuExit
+    jmp EndProgram
 
 ParseMainMenu endp
 
@@ -40,6 +49,8 @@ ParseRecordTransaction proc
     jmp StartParseRecordTransaction
 
 SelectIncomeTransaction:
+    NEW_LINE
+    NEW_LINE
     lea si, promptIncome
     lea di, incomeBuffer
     mov singleInput, 0
@@ -49,76 +60,82 @@ SelectIncomeTransaction:
     lea di, incomeAmount
     call ConvertToNum
 
-    mov ax, incomeTotal
-    add ax, incomeAmount
-    mov incomeTotal, ax
+    lea si, currentBalance
+    lea di, incomeAmount
+    mov bx, 1
+    call UpdateBalance
 
-    mov ax, incomeAmount
-    add newBalance, ax
-
-    jmp ProgramStart
+    NEW_LINE
+    PRESS_ANY_KEY
+    jmp RecordTransaction
 
 SelectExpensesTransaction:
     call ExpensesTransaction
-    jmp ProgramStart
 
-SelectTransactionExit:
-    jmp ProgramStart
+RecordTransactionOutOfRange:
+    jmp RecordTransaction
 
 StartParseRecordTransaction:
+    cmp choice, "0"
+    jle RecordTransactionOutOfRange
+
+    mov dl, TRANSACTION_MENU_MAX
+    cmp choice, dl
+    jge RecordTransactionOutOfRange
+
     cmp choice, "1"
     je SelectIncomeTransaction
 
     cmp choice, "2"
     je SelectExpensesTransaction
-
-    cmp choice, "3"
-    je SelectTransactionExit
+    ret
 
 ParseRecordTransaction endp
 
 ParseExpensesTransaction proc
+    NEW_LINE
+    NEW_LINE
     jmp StartParseExpensesTransaction
 
 SelectBills:
     lea si, promptBills
     lea di, billsBuffer
-    mov singleInput, 0
-    call Prompt
+    lea bx, billsAmount
+    mov cx, 1
+    call PromptConvertInsert
 
-    lea si, billsBuffer + 2
+    lea si, currentBalance
     lea di, billsAmount
-    call ConvertToNum
+    mov bx, 0
+    call UpdateBalance
 
-    mov ax, billsAmount
-    mov dx, 0
-    mov dl, choice
-    sub dl, '0'
-    dec dl
-    mov bx, dx
-    call InsertIntoExpensesArray
-    jmp ProgramStart
+    jmp RestartExpensesTransaction
 
 SelectInsurance:
     lea si, promptInsurance
     lea di, insuranceBuffer
-    mov singleInput, 0
-    call Prompt
+    lea bx, insuranceAmount
+    mov cx, 1
+    call PromptConvertInsert
 
-    lea si, insuranceBuffer + 2
+    lea si, currentBalance
     lea di, insuranceAmount
-    call ConvertToNum
+    mov bx, 0
+    call UpdateBalance
 
-    mov ax, insuranceAmount
-    mov dx, 0
-    mov dl, choice
-    sub dl, '0'
-    dec dl
-    mov bx, dx
-    call InsertIntoExpensesArray
-    jmp ProgramStart
+    jmp RestartExpensesTransaction
+
+ExpensesTransactionOutOfRange:
+    jmp ExpensesTransaction
 
 StartParseExpensesTransaction:
+    cmp choice, "0"
+    jle ExpensesTransactionOutOfRange
+
+    mov dl, EXPENSES_MENU_MAX
+    cmp choice, dl
+    jge ExpensesTransactionOutOfRange
+
     cmp choice, "1"
     je SelectGroceries
 
@@ -133,66 +150,52 @@ StartParseExpensesTransaction:
 
     cmp choice, "5"
     je SelectInsurance
-    ret
+
+    jmp RecordTransaction
 
 SelectGroceries:
     lea si, promptGroceries
     lea di, groceriesBuffer
-    mov singleInput, 0
-    call Prompt
+    lea bx, groceriesAmount
+    mov cx, 1
+    call PromptConvertInsert
 
-    lea si, groceriesBuffer + 2
+    lea si, currentBalance
     lea di, groceriesAmount
-    call ConvertToNum
+    mov bx, 0
+    call UpdateBalance
 
-    call CalculateGroceriesSST
-
-    mov ax, groceriesAmount
-    mov dx, 0
-    mov dl, choice
-    sub dl, '0'
-    dec dl
-    mov bx, dx
-    call InsertIntoExpensesArray
-    jmp ProgramStart
+    jmp RestartExpensesTransaction
 
 SelectVehicle:
     lea si, promptVehicle
-    lea di, insuranceBuffer
-    mov singleInput, 0
-    call Prompt
+    lea di, vehicleBuffer
+    lea bx, vehicleAmount
+    mov cx, 1
+    call PromptConvertInsert
 
-    lea si, insuranceBuffer + 2
-    lea di, insuranceAmount
-    call ConvertToNum
+    lea si, currentBalance
+    lea di, vehicleAmount
+    mov bx, 0
+    call UpdateBalance
 
-    mov ax, insuranceAmount
-    mov dx, 0
-    mov dl, choice
-    sub dl, '0'
-    dec dl
-    mov bx, dx
-    call InsertIntoExpensesArray
-    jmp ProgramStart
+    jmp RestartExpensesTransaction
 
 SelectAccomodation:
     lea si, promptAccomodation
     lea di, accomodationBuffer
-    mov singleInput, 0
-    call Prompt
+    lea bx, accomodationAmount
+    mov cx, 1
+    call PromptConvertInsert
 
-    lea si, accomodationBuffer + 2
+    lea si, currentBalance
     lea di, accomodationAmount
-    call ConvertToNum
+    mov bx, 0
+    call UpdateBalance
 
-    mov ax, accomodationAmount
-    mov dx, 0
-    mov dl, choice
-    sub dl, '0'
-    dec dl
-    mov bx, dx
-    call InsertIntoExpensesArray
-    jmp ProgramStart
+RestartExpensesTransaction:
+    PRESS_ANY_KEY
+    jmp ExpensesTransaction
 
 ParseExpensesTransaction endp
 

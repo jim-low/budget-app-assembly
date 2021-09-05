@@ -7,6 +7,9 @@
     totalExpensesPercentageMsg db "Your total expenses percentage is 69420% lmao, you broke af$"
     totalIncomePercentageMsg db "Your total income percentage is 0% lmao$"
 
+    initialBalancePrompt db "Please Enter Your Current Balance: $"
+    initialBalanceBuffer db 18, ?, 20 dup ("$")
+
     include utils.inc
     include sign-up.asm
     include login.asm
@@ -21,6 +24,10 @@ main proc
 
     call SignUp
     call Login
+
+    CLEAR
+    call PromptInitialBalance
+
     jmp ProgramStart
 
 RecordTransaction:
@@ -87,5 +94,21 @@ EndProgram:
     int 21h
 
 main endp
+
+PromptInitialBalance proc
+    lea si, initialBalancePrompt
+    lea di, initialBalanceBuffer
+    mov singleInput, 0
+    call Prompt
+
+    lea si, initialBalanceBuffer + 2
+    lea di, initialBalance
+    call ConvertToNum
+
+    mov ax, initialBalance
+    mov currentBalance, ax
+    ret
+PromptInitialBalance endp
+
 end main
 

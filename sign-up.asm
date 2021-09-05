@@ -15,8 +15,8 @@
     password db 30 dup ("$")
     incorrectPasswordMsg db 10, 13, "          Your Password Is Not In The Correct Form"
                          db 10, 13, "          Possible Errors:"
-                         db 10, 13, "             1) Not having a minimum of 10 characters"
-                         db 10, 13, "             2) Password Must Contain (Uppercase, Lowercase, and numbers)"
+                         db 10, 13, "          1) Not having a minimum of 10 characters"
+                         db 10, 13, "          2) Password Must Contain (Uppercase, Lowercase, and numbers)"
                          db "$"
     passwordHasNumber db 0
     passwordHasLowerCase db 0
