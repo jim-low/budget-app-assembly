@@ -4,7 +4,7 @@
 
     loginUsername db 30, ?, 32 dup ("$")
     loginPassword db 30 dup ("$")
-    failed db "                              ! Failed To Log In D: !$"
+    failed db "                              !! Failed To Log In !!$"
     success db "                           -- Successfully Logged In! -- $"
     exceeded db "  - You have exceeded the maximum amount of tries. -$"
     count db 0
