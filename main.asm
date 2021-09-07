@@ -7,9 +7,6 @@
     totalExpensesPercentageMsg db "Your total expenses percentage is 69420% lmao, you broke af$"
     totalIncomePercentageMsg db "Your total income percentage is 0% lmao$"
 
-    initialBalancePrompt db "Please Enter Your Current Balance: $"
-    initialBalanceBuffer db 18, ?, 20 dup ("$")
-
     include utils.inc
     include sign-up.asm
     include login.asm

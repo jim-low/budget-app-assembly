@@ -1,4 +1,5 @@
 .data
+    initialBalancePrompt db "Please Enter Your Current Balance: $"
     promptGroceries db "                       Enter Your Groceries Expenses: RM$"
     promptVehicle db "                       Enter Your Vehicle Expenses: RM$"
     promptAccomodation db "                       Enter Your Accomodation Expenses: RM$"
@@ -12,6 +13,7 @@
     accomodationBuffer dw 18, ?, 20 dup ("$")
     insuranceBuffer dw 18, ?, 20 dup ("$")
     billsBuffer dw 18, ?, 20 dup ("$")
+    initialBalanceBuffer db 18, ?, 20 dup ("$")
 
     groceriesTail dw 0
     vehicleTail dw 1
