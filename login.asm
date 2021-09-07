@@ -57,10 +57,10 @@ Psw:
     mov bx, 0
 CheckPsw:
     mov al, [loginPassword+bx]
-    cmp al, 0dh
-    je LoginSuccess
     cmp al, [password+bx]
     jne Fail
+    cmp al, 0dh
+    je LoginSuccess
     inc bx
     jmp CheckPsw
 
