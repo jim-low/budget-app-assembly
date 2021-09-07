@@ -1,5 +1,4 @@
 .data
-    initialBalancePrompt db "Please Enter Your Current Balance: $"
     promptGroceries db "                       Enter Your Groceries Expenses: RM$"
     promptVehicle db "                       Enter Your Vehicle Expenses: RM$"
     promptAccomodation db "                       Enter Your Accomodation Expenses: RM$"
