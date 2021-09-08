@@ -6,8 +6,8 @@
     promptInsurance db "                       Enter Your Insurance Expenses: RM$"
     promptIncome db "                    Enter Your Income For The Month: RM$"
 
-    showSSTSubTotal db "Your SST value: RM$"
-    showGroceriesACTUALTotal db "Your Groceries Total (Rounded Value): RM$"
+    showSSTSubTotal db 10, 13, "                       Your SST value: RM$"
+    showGroceriesACTUALTotal db 10, 13, "                       Your Groceries Total (Rounded Value): RM$"
 
     incomeBuffer dw 18, ?, 20 dup ("$")
     groceriesBuffer dw 18, ?, 20 dup ("$")
@@ -71,7 +71,6 @@ PromptConvertInsert proc
     mov singleInput, 0
     call Prompt
 
-    NEW_LINE
     add di, 2
     mov si, di
     mov di, bx
