@@ -17,6 +17,8 @@
     billsBuffer dw 18, ?, 20 dup ("$")
     initialBalanceBuffer db 18, ?, 20 dup ("$")
 
+    percentage dw ?
+
     groceriesTail dw 0
     vehicleTail dw 1
     accomodationTail dw 2
@@ -58,20 +60,7 @@ SumUp:
     add sumOfAllExpenses, ax
     add si, 2
     loop SumUp
-
-CalculateNewBalance:
-    mov ax, currentBalance
-    sub ax, sumOfAllExpenses
-    mov initialBalance, ax
-
-    mov dx, 0
-    mov ax, sumOfAllExpenses
-    cmp ax, 655
-    ja warningMsg
-    mul hundred
-    div currentBalance
-    mov overallBudgetUsage, ax
-
+    ret
 SumExpensesArray endp
 
 warningMsg:
@@ -102,17 +91,18 @@ Continue:
 
 PromptConvertInsert endp
 
-CompareAmountAndCalculatePercentage proc
-    mov ax, [si] ;si = total (income/expenses), di = percentage, bx = initial (income/expenses)
-    cmp ax, bx  ;ax < bx
+CompareAmountAndCalculatePercentage proc ; si = total (income/expenses), di = destination
+    mov dx, 0
+    mov ax, [si]
+    cmp ax, initialBalance  ;ax < bx
     jb MultiplyFirst ;total < initial
-    div bx           ;(total / initial)* 100
+    div initialBalance           ;(total / initial)* 100
     mul hundred
     jmp EndOfCalculating
 
 MultiplyFirst:  ;(total * 100) / initial
     mul hundred
-    div bx
+    div initialBalance
 
 EndOfCalculating:
     mov [di], ax
