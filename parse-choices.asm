@@ -160,6 +160,18 @@ SelectGroceries:
     mov cx, 1
     call PromptConvertInsert
 
+    lea si, showSSTSubTotal
+    lea di, groceriesSST
+    call DisplayFloatingPoint
+
+    lea si, showGroceriesACTUALTotal
+    mov dl, stringFlag
+    call Display
+
+    lea si, groceriesAmount
+    mov dl, digitsFlag
+    call Display
+
     lea si, currentBalance
     lea di, groceriesAmount
     mov bx, 0
