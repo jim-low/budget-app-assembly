@@ -56,18 +56,6 @@ ExpensesTransaction:
 
     ret
 
-DisplayTotalIncomePercentage:
-    lea si, totalIncomePercentageMsg
-    mov dl, stringFlag
-    call Display
-    ret
-
-DisplayTotalExpensesPercentage:
-    lea si, totalExpensesPercentageMsg
-    mov dl, stringFlag
-    call Display
-    ret
-
 ProgramStart:
     CLEAR
     call ShowMainMenu
