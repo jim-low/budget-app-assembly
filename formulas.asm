@@ -91,7 +91,8 @@ Continue:
 
 PromptConvertInsert endp
 
-CompareAmountAndCalculatePercentage proc ; si = total (income/expenses), di = destination
+CompareAmountAndCalculatePercentage proc ; si = total (income/expenses)
+    mov percentage, 0
     mov dx, 0
     mov ax, [si]
     cmp ax, initialBalance  ;ax < bx
@@ -105,7 +106,7 @@ MultiplyFirst:  ;(total * 100) / initial
     div initialBalance
 
 EndOfCalculating:
-    mov [di], ax
+    mov percentage, ax
     ret
 CompareAmountAndCalculatePercentage endp
 
