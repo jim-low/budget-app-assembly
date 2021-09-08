@@ -4,9 +4,6 @@
     choicePrompt db "                             Enter your choice: $"
     choice db ?
 
-    totalExpensesPercentageMsg db "Your total expenses percentage is 69420% lmao, you broke af$"
-    totalIncomePercentageMsg db "Your total income percentage is 0% lmao$"
-
     include utils.inc
     include sign-up.asm
     include login.asm
