@@ -243,3 +243,26 @@ ShowInitialBalanceScreen proc
     ret
 ShowInitialBalanceScreen endp
 
+DisplayFloatingPoint proc ; si = msg, di = value
+    lea si, [si]
+    mov dl, stringFlag
+    call Display
+
+    lea si, [di]
+    mov dl, digitsFlag
+    call Display
+
+    mov dl, '.'
+    mov ah, 02h
+    int 21h
+
+    lea si, quotient
+    mov dl, charFlag
+    call Display
+
+    lea si, remainder
+    mov dl, charFlag
+    call Display
+    ret
+DisplayFloatingPoint endp
+
