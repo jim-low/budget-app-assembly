@@ -288,7 +288,8 @@ DisplayFloatingPoint proc ; si = msg, di = value
     ret
 DisplayFloatingPoint endp
 
-ListExpensesPercentages proc
+DisplayTotalExpensesPercentage proc
+    CLEAR
     lea si, expensesPercentagesBanner
     mov dl, stringFlag
     call Display
@@ -340,5 +341,5 @@ DisplayPercentages:
     mov rowNum, 12
 
     ret
-ListExpensesPercentages endp
+DisplayTotalExpensesPercentage endp
 
