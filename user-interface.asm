@@ -87,6 +87,28 @@
     usernameFormat db "Username: $"
     balanceFormat db "Balance: RM$"
 
+    expensesPercentagesBanner db 10, 13, "                      ___                               "
+                              db 10, 13, "                     | __|_ ___ __  ___ _ _  ___ ___ ___"
+                              db 10, 13, "                     | _|\ \ / '_ \/ -_) ' \(_-</ -_|_-<"
+                              db 10, 13, "                     |___/_\_\ .__/\___|_||_/__/\___/__/"
+                              db 10, 13, "                             |_|                        "
+                              db 10, 13, "                 ___                    _                    "
+                              db 10, 13, "                | _ \___ _ _ __ ___ _ _| |_ __ _ __ _ ___ ___"
+                              db 10, 13, "                |  _/ -_) '_/ _/ -_) ' \  _/ _` / _` / -_|_-<"
+                              db 10, 13, "                |_| \___|_| \__\___|_||_\__\__,_\__, \___/__/"
+                              db 10, 13, "                                                |___/        "
+                              db "$"
+
+    expensesPercentages db 10, 13, "                      Groceries Percentage        :"
+                        db 10, 13, "                      Vehicle Percentage          :"
+                        db 10, 13, "                      Accomodation Percentage     :"
+                        db 10, 13, "                      Bills Percentage            :"
+                        db 10, 13, "                      Insurance Percentage        :"
+                        db "$"
+    loopCount dw 0
+    arrIndex dw 0
+    rowNum db 12
+
     include datetime.inc
 
 .code
@@ -265,4 +287,58 @@ DisplayFloatingPoint proc ; si = msg, di = value
     call Display
     ret
 DisplayFloatingPoint endp
+
+ListExpensesPercentages proc
+    lea si, expensesPercentagesBanner
+    mov dl, stringFlag
+    call Display
+
+    NEW_LINE
+
+    lea si, expensesPercentages
+    mov dl, stringFlag
+    call Display
+
+    mov cx, 5
+    mov bx, 0
+
+DisplayPercentages:
+    mov dh, rowNum
+    mov dl, 52
+    mov bh, 0
+    mov ah, 2
+    int 10h
+
+    mov loopCount, cx
+    mov arrIndex, bx
+
+    lea si, expensesArray[bx]
+    call CompareAmountAndCalculatePercentage
+
+    lea si, percentage
+    mov dl, digitsFlag
+    call Display
+
+    mov cx, loopCount
+    mov bx, arrIndex
+
+    mov dl, "%"
+    mov ah, 02h
+    int 21h
+
+    add bx, 2
+    inc rowNum
+
+    loop DisplayPercentages
+
+    mov dh, 20
+    mov dl, 0
+    mov bh, 0
+    mov ah, 2
+    int 10h
+
+    mov rowNum, 12
+
+    ret
+ListExpensesPercentages endp
 
