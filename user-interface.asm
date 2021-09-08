@@ -105,9 +105,27 @@
                         db 10, 13, "                      Bills Percentage            :"
                         db 10, 13, "                      Insurance Percentage        :"
                         db "$"
+
     loopCount dw 0
     arrIndex dw 0
     rowNum db 12
+
+
+    incomePercentageBanner db 10, 13, "                      ___                                "
+                           db 10, 13, "                     |_ _|_ __   ___ ___  _ __ ___   ___ "
+                           db 10, 13, "                      | || '_ \ / __/ _ \| '_ ` _ \ / _ \"
+                           db 10, 13, "                      | || | | | (_| (_) | | | | | |  __/"
+                           db 10, 13, "                     |___|_| |_|\___\___/|_| |_| |_|\___|"
+                           db 10, 13, "                                                  "
+                           db 10, 13, "               ____                         _                   "
+                           db 10, 13, "              |  _ \ ___ _ __ ___ ___ _ __ | |_ __ _  __ _  ___ "
+                           db 10, 13, "              | |_) / _ \ '__/ __/ _ \ '_ \| __/ _` |/ _` |/ _ \"
+                           db 10, 13, "              |  __/  __/ | | (_|  __/ | | | || (_| | (_| |  __/"
+                           db 10, 13, "              |_|   \___|_|  \___\___|_| |_|\__\__,_|\__, |\___|"
+                           db 10, 13, "                                                     |___/      "
+                           db "$"
+
+    incomePercentage db "                      Your Income Percentage        : $"
 
     include datetime.inc
 
@@ -121,7 +139,7 @@ ShowMainMenu proc
 
     lea si, banner
     mov dl, stringFlag
-    call display
+    call Display
 
     NEW_LINE
 
@@ -289,7 +307,6 @@ DisplayFloatingPoint proc ; si = msg, di = value
 DisplayFloatingPoint endp
 
 DisplayTotalExpensesPercentage proc
-    CLEAR
     lea si, expensesPercentagesBanner
     mov dl, stringFlag
     call Display
@@ -342,4 +359,38 @@ DisplayPercentages:
 
     ret
 DisplayTotalExpensesPercentage endp
+
+DisplayTotalIncomePercentage proc
+    lea si, incomePercentageBanner
+    mov dl, stringFlag
+    call Display
+
+    NEW_LINE
+    NEW_LINE
+    NEW_LINE
+    NEW_LINE
+
+    lea si, incomePercentage
+    mov dl, stringFlag
+    call Display
+
+    lea si, incomeTotal
+    call CompareAmountAndCalculatePercentage
+
+    lea si, percentage
+    mov dl, digitsFlag
+    call Display
+
+    mov dl, "%"
+    mov ah, 02h
+    int 21h
+
+    mov dh, 20
+    mov dl, 0
+    mov bh, 0
+    mov ah, 2
+    int 10h
+
+    ret
+DisplayTotalIncomePercentage endp
 
