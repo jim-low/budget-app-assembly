@@ -62,6 +62,11 @@
                 db 10, 13, "                    |___/                                                "
                 db "$"
 
+    initialBalanceMsg db 10, 13, "           _                      ___              _"
+                      db 10, 13, "          |_.__|_ _ ._ \_/_    ._  | ._ o_|_o _.| |_) _.| _.._  _ _"
+                      db 10, 13, "          |_| ||_(/_|   |(_)|_||  _|_| || |_|(_|| |_)(_||(_|| |(_(/_"
+                      db "$"
+
     exitMsg db 10, 13, "             ______ _                    _      _"
             db 10, 13, "            (_) |  | |                  | |    (_|   |"
             db 10, 13, "                |  | |     __,   _  _   | |      |   |  __"
@@ -82,6 +87,46 @@
     usernameFormat db "Username: $"
     balanceFormat db "Balance: RM$"
 
+    expensesPercentagesBanner db 10, 13, "                      ___                               "
+                              db 10, 13, "                     | __|_ ___ __  ___ _ _  ___ ___ ___"
+                              db 10, 13, "                     | _|\ \ / '_ \/ -_) ' \(_-</ -_|_-<"
+                              db 10, 13, "                     |___/_\_\ .__/\___|_||_/__/\___/__/"
+                              db 10, 13, "                             |_|                        "
+                              db 10, 13, "                 ___                    _                    "
+                              db 10, 13, "                | _ \___ _ _ __ ___ _ _| |_ __ _ __ _ ___ ___"
+                              db 10, 13, "                |  _/ -_) '_/ _/ -_) ' \  _/ _` / _` / -_|_-<"
+                              db 10, 13, "                |_| \___|_| \__\___|_||_\__\__,_\__, \___/__/"
+                              db 10, 13, "                                                |___/        "
+                              db "$"
+
+    expensesPercentages db 10, 13, "                      Groceries Percentage        :"
+                        db 10, 13, "                      Vehicle Percentage          :"
+                        db 10, 13, "                      Accomodation Percentage     :"
+                        db 10, 13, "                      Bills Percentage            :"
+                        db 10, 13, "                      Insurance Percentage        :"
+                        db "$"
+
+    loopCount dw 0
+    arrIndex dw 0
+    rowNum db 12
+
+
+    incomePercentageBanner db 10, 13, "                      ___                                "
+                           db 10, 13, "                     |_ _|_ __   ___ ___  _ __ ___   ___ "
+                           db 10, 13, "                      | || '_ \ / __/ _ \| '_ ` _ \ / _ \"
+                           db 10, 13, "                      | || | | | (_| (_) | | | | | |  __/"
+                           db 10, 13, "                     |___|_| |_|\___\___/|_| |_| |_|\___|"
+                           db 10, 13, "                                                  "
+                           db 10, 13, "               ____                         _                   "
+                           db 10, 13, "              |  _ \ ___ _ __ ___ ___ _ __ | |_ __ _  __ _  ___ "
+                           db 10, 13, "              | |_) / _ \ '__/ __/ _ \ '_ \| __/ _` |/ _` |/ _ \"
+                           db 10, 13, "              |  __/  __/ | | (_|  __/ | | | || (_| | (_| |  __/"
+                           db 10, 13, "              |_|   \___|_|  \___\___|_| |_|\__\__,_|\__, |\___|"
+                           db 10, 13, "                                                     |___/      "
+                           db "$"
+
+    incomePercentage db "                      Your Income Percentage        : $"
+
     include datetime.inc
 
 .code
@@ -94,7 +139,7 @@ ShowMainMenu proc
 
     lea si, banner
     mov dl, stringFlag
-    call display
+    call Display
 
     NEW_LINE
 
@@ -209,4 +254,143 @@ ShowExitScreen proc
 
     ret
 ShowExitScreen endp
+
+ShowInitialBalanceScreen proc
+    CLEAR
+
+    mov dh, 8
+    mov dl, 5
+    mov bh, 0
+    mov ah, 2
+    int 10h
+
+    lea si, initialBalanceMsg
+    mov dl, stringFlag
+    call Display
+
+    NEW_LINE
+
+    mov dh, 14
+    mov dl, 29
+    mov bh, 0
+    mov ah, 2
+    int 10h
+
+    lea si, balanceFormat
+    mov dl, stringFlag
+    call Display
+
+    ret
+ShowInitialBalanceScreen endp
+
+DisplayFloatingPoint proc ; si = msg, di = value
+    lea si, [si]
+    mov dl, stringFlag
+    call Display
+
+    lea si, [di]
+    mov dl, digitsFlag
+    call Display
+
+    mov dl, '.'
+    mov ah, 02h
+    int 21h
+
+    lea si, quotient
+    mov dl, charFlag
+    call Display
+
+    lea si, remainder
+    mov dl, charFlag
+    call Display
+    ret
+DisplayFloatingPoint endp
+
+DisplayTotalExpensesPercentage proc
+    lea si, expensesPercentagesBanner
+    mov dl, stringFlag
+    call Display
+
+    NEW_LINE
+
+    lea si, expensesPercentages
+    mov dl, stringFlag
+    call Display
+
+    mov cx, 5
+    mov bx, 0
+
+DisplayPercentages:
+    mov dh, rowNum
+    mov dl, 52
+    mov bh, 0
+    mov ah, 2
+    int 10h
+
+    mov loopCount, cx
+    mov arrIndex, bx
+
+    lea si, expensesArray[bx]
+    call CompareAmountAndCalculatePercentage
+
+    lea si, percentage
+    mov dl, digitsFlag
+    call Display
+
+    mov cx, loopCount
+    mov bx, arrIndex
+
+    mov dl, "%"
+    mov ah, 02h
+    int 21h
+
+    add bx, 2
+    inc rowNum
+
+    loop DisplayPercentages
+
+    mov dh, 20
+    mov dl, 0
+    mov bh, 0
+    mov ah, 2
+    int 10h
+
+    mov rowNum, 12
+
+    ret
+DisplayTotalExpensesPercentage endp
+
+DisplayTotalIncomePercentage proc
+    lea si, incomePercentageBanner
+    mov dl, stringFlag
+    call Display
+
+    NEW_LINE
+    NEW_LINE
+    NEW_LINE
+    NEW_LINE
+
+    lea si, incomePercentage
+    mov dl, stringFlag
+    call Display
+
+    lea si, incomeTotal
+    call CompareAmountAndCalculatePercentage
+
+    lea si, percentage
+    mov dl, digitsFlag
+    call Display
+
+    mov dl, "%"
+    mov ah, 02h
+    int 21h
+
+    mov dh, 20
+    mov dl, 0
+    mov bh, 0
+    mov ah, 2
+    int 10h
+
+    ret
+DisplayTotalIncomePercentage endp
 

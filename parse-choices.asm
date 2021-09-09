@@ -12,11 +12,13 @@ SelectRecordTransaction:
     jmp ProgramStart
 
 SelectDisplayTotalIncomePercentage:
+    CLEAR
     call DisplayTotalIncomePercentage
     PRESS_ANY_KEY
     jmp ProgramStart
 
 SelectDisplayTotalExpensesPercentage:
+    CLEAR
     call DisplayTotalExpensesPercentage
     PRESS_ANY_KEY
     jmp ProgramStart
@@ -101,7 +103,7 @@ SelectBills:
     lea si, promptBills
     lea di, billsBuffer
     lea bx, billsAmount
-    mov cx, 1
+    mov cx, 0
     call PromptConvertInsert
 
     lea si, currentBalance
@@ -115,7 +117,7 @@ SelectInsurance:
     lea si, promptInsurance
     lea di, insuranceBuffer
     lea bx, insuranceAmount
-    mov cx, 1
+    mov cx, 0
     call PromptConvertInsert
 
     lea si, currentBalance
@@ -160,6 +162,18 @@ SelectGroceries:
     mov cx, 1
     call PromptConvertInsert
 
+    lea si, showSSTSubTotal
+    lea di, groceriesSST
+    call DisplayFloatingPoint
+
+    lea si, showGroceriesACTUALTotal
+    mov dl, stringFlag
+    call Display
+
+    lea si, groceriesAmount
+    mov dl, digitsFlag
+    call Display
+
     lea si, currentBalance
     lea di, groceriesAmount
     mov bx, 0
@@ -171,7 +185,7 @@ SelectVehicle:
     lea si, promptVehicle
     lea di, vehicleBuffer
     lea bx, vehicleAmount
-    mov cx, 1
+    mov cx, 0
     call PromptConvertInsert
 
     lea si, currentBalance
@@ -185,7 +199,7 @@ SelectAccomodation:
     lea si, promptAccomodation
     lea di, accomodationBuffer
     lea bx, accomodationAmount
-    mov cx, 1
+    mov cx, 0
     call PromptConvertInsert
 
     lea si, currentBalance
@@ -194,6 +208,7 @@ SelectAccomodation:
     call UpdateBalance
 
 RestartExpensesTransaction:
+    NEW_LINE
     PRESS_ANY_KEY
     jmp ExpensesTransaction
 

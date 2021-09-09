@@ -6,12 +6,18 @@
     promptInsurance db "                       Enter Your Insurance Expenses: RM$"
     promptIncome db "                    Enter Your Income For The Month: RM$"
 
+    showSSTSubTotal db 10, 13, "                       Your SST value: RM$"
+    showGroceriesACTUALTotal db 10, 13, "                       Your Groceries Total (Rounded Value): RM$"
+
     incomeBuffer dw 18, ?, 20 dup ("$")
     groceriesBuffer dw 18, ?, 20 dup ("$")
     vehicleBuffer dw 18, ?, 20 dup ("$")
     accomodationBuffer dw 18, ?, 20 dup ("$")
     insuranceBuffer dw 18, ?, 20 dup ("$")
     billsBuffer dw 18, ?, 20 dup ("$")
+    initialBalanceBuffer db 18, ?, 20 dup ("$")
+
+    percentage dw ?
 
     groceriesTail dw 0
     vehicleTail dw 1
@@ -54,20 +60,7 @@ SumUp:
     add sumOfAllExpenses, ax
     add si, 2
     loop SumUp
-
-CalculateNewBalance:
-    mov ax, currentBalance
-    sub ax, sumOfAllExpenses
-    mov initialBalance, ax
-
-    mov dx, 0
-    mov ax, sumOfAllExpenses
-    cmp ax, 655
-    ja warningMsg
-    mul hundred
-    div currentBalance
-    mov overallBudgetUsage, ax
-
+    ret
 SumExpensesArray endp
 
 warningMsg:
@@ -78,7 +71,6 @@ PromptConvertInsert proc
     mov singleInput, 0
     call Prompt
 
-    NEW_LINE
     add di, 2
     mov si, di
     mov di, bx
@@ -98,20 +90,22 @@ Continue:
 
 PromptConvertInsert endp
 
-CompareAmountAndCalculatePercentage proc
-    mov ax, [si] ;si = total (income/expenses), di = percentage, bx = initial (income/expenses)
-    cmp ax, bx  ;ax < bx
+CompareAmountAndCalculatePercentage proc ; si = total (income/expenses)
+    mov percentage, 0
+    mov dx, 0
+    mov ax, [si]
+    cmp ax, initialBalance  ;ax < bx
     jb MultiplyFirst ;total < initial
-    div bx           ;(total / initial)* 100
+    div initialBalance           ;(total / initial)* 100
     mul hundred
     jmp EndOfCalculating
 
 MultiplyFirst:  ;(total * 100) / initial
     mul hundred
-    div bx
+    div initialBalance
 
 EndOfCalculating:
-    mov [di], ax
+    mov percentage, ax
     ret
 CompareAmountAndCalculatePercentage endp
 

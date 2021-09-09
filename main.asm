@@ -4,12 +4,6 @@
     choicePrompt db "                             Enter your choice: $"
     choice db ?
 
-    totalExpensesPercentageMsg db "Your total expenses percentage is 69420% lmao, you broke af$"
-    totalIncomePercentageMsg db "Your total income percentage is 0% lmao$"
-
-    initialBalancePrompt db "Please Enter Your Current Balance: $"
-    initialBalanceBuffer db 18, ?, 20 dup ("$")
-
     include utils.inc
     include sign-up.asm
     include login.asm
@@ -62,18 +56,6 @@ ExpensesTransaction:
 
     ret
 
-DisplayTotalIncomePercentage:
-    lea si, totalIncomePercentageMsg
-    mov dl, stringFlag
-    call Display
-    ret
-
-DisplayTotalExpensesPercentage:
-    lea si, totalExpensesPercentageMsg
-    mov dl, stringFlag
-    call Display
-    ret
-
 ProgramStart:
     CLEAR
     call ShowMainMenu
@@ -96,10 +78,11 @@ EndProgram:
 main endp
 
 PromptInitialBalance proc
-    lea si, initialBalancePrompt
-    lea di, initialBalanceBuffer
-    mov singleInput, 0
-    call Prompt
+    call ShowInitialBalanceScreen
+
+    lea dx, initialBalanceBuffer
+    mov ah, 0ah
+    int 21h
 
     lea si, initialBalanceBuffer + 2
     lea di, initialBalance
@@ -109,6 +92,5 @@ PromptInitialBalance proc
     mov currentBalance, ax
     ret
 PromptInitialBalance endp
-
 end main
 

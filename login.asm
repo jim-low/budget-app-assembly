@@ -4,7 +4,7 @@
 
     loginUsername db 30, ?, 32 dup ("$")
     loginPassword db 30 dup ("$")
-    failed db "                              ! Failed To Log In D: !$"
+    failed db "                              !! Failed To Log In !!$"
     success db "                           -- Successfully Logged In! -- $"
     exceeded db "  - You have exceeded the maximum amount of tries. -$"
     count db 0
@@ -57,10 +57,10 @@ Psw:
     mov bx, 0
 CheckPsw:
     mov al, [loginPassword+bx]
-    cmp al, 0dh
-    je LoginSuccess
     cmp al, [password+bx]
     jne Fail
+    cmp al, 0dh
+    je LoginSuccess
     inc bx
     jmp CheckPsw
 
