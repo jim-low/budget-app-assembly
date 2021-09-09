@@ -33,9 +33,11 @@ Input:
 
     mov bx, 0
 CheckUsername:
-    mov al, [loginUsername+2+bx]
     cmp al, 0dh
     je Psw
+	mov al, [loginUsername+2+bx]
+    ;cmp al, 0dh
+    ;je Psw
     cmp al, [username+2+bx]
     je PassUsername
     jmp Fail
