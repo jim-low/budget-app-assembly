@@ -50,6 +50,8 @@
 	previousBalance dw 0
     overallBudgetUsage dw ?
 
+    operand db -1, 0, 1, 2, 3
+
 .code
 SumExpensesArray proc
     mov cx, 5
@@ -82,9 +84,16 @@ PromptConvertInsert proc
 
 Continue:
     mov ax, [di]
+
     mov dl, choice
     sub dl, 30h
-    dec dl
+
+    mov bx, 0
+    mov bl, dl
+    dec bl
+
+    add dl, operand[bx]
+
     mov bx, dx
     call InsertIntoExpensesArray
     ret
