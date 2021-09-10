@@ -16,8 +16,11 @@ main proc
     mov ax, @data
     mov ds, ax
 
+Register:
     call SignUp
     call Login
+	cmp isSuccess, 0
+	je Register
 
     CLEAR
     call PromptInitialBalance
