@@ -67,6 +67,9 @@ SelectIncomeTransaction:
     mov bx, 1
     call UpdateBalance
 
+    mov bx, incomeAmount
+    add incomeTotal, bx
+
     NEW_LINE
     PRESS_ANY_KEY
     jmp RecordTransaction
