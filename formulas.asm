@@ -47,6 +47,7 @@
     sumOfAllExpenses dw 0
     initialBalance dw 0
     currentBalance dw 0
+	previousBalance dw 0
     overallBudgetUsage dw ?
 
 .code
