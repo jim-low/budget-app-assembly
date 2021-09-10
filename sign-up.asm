@@ -27,6 +27,7 @@
 
 .code
 signup proc
+StartSignUp:
     CLEAR
     call ShowSignup
 
@@ -169,7 +170,20 @@ ErrorPs:
 
     NEW_LINE
 
+    inc count
+
+    cmp count, 3
+    je Exceedededed
+
     jmp InputPassword
+
+Exceedededed:
+    CHANGE_COLOR 04h, exceeded
+    mov count, 0
+
+    PRESS_ANY_KEY
+
+    jmp StartSignUp
 
 FinalMsg:
     lea si, password
@@ -183,6 +197,8 @@ FinalMsg:
 
     NEW_LINE
     NEW_LINE
+
+    mov count, 0
 
     PRESS_ANY_KEY
 

@@ -49,6 +49,7 @@ Exceed:
     CHANGE_COLOR 04h, exceeded
 	PRESS_ANY_KEY
 	mov isSuccess, 0
+    mov count, 0
 	ret
 
 Psw:
