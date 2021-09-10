@@ -110,7 +110,7 @@ EndOfCalculating:
 CompareAmountAndCalculatePercentage endp
 
 UpdateBalance proc
-    ;bx = 0(income)/1(expenses), si = currentBalance, di = specific expense / incomeAccount
+    ;bx = 1(income)/0(expenses), si = currentBalance, di = specific expense / incomeAccount
     cmp bx, 1
     je UpdateIncome
     mov ax, [si]
