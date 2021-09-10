@@ -47,6 +47,7 @@
     sumOfAllExpenses dw 0
     initialBalance dw 0
     currentBalance dw 0
+	previousBalance dw 0
     overallBudgetUsage dw ?
 
 .code
@@ -94,15 +95,15 @@ CompareAmountAndCalculatePercentage proc ; si = total (income/expenses)
     mov percentage, 0
     mov dx, 0
     mov ax, [si]
-    cmp ax, initialBalance  ;ax < bx
-    jb MultiplyFirst ;total < initial
-    div initialBalance           ;(total / initial)* 100
+    cmp ax, previousBalance  ;ax < bx
+    jb MultiplyFirst ;total < previousBalance
+    div previousBalance           ;(total / previousBalance)* 100
     mul hundred
     jmp EndOfCalculating
 
-MultiplyFirst:  ;(total * 100) / initial
+MultiplyFirst:  ;(total * 100) / previousBalance
     mul hundred
-    div initialBalance
+    div previousBalance
 
 EndOfCalculating:
     mov percentage, ax
@@ -110,20 +111,19 @@ EndOfCalculating:
 CompareAmountAndCalculatePercentage endp
 
 UpdateBalance proc
-    ;bx = 1(income)/0(expenses), si = currentBalance, di = specific expense / incomeAccount
-    cmp bx, 1
-    je UpdateIncome
+    ;bx = 0(income)/1(expenses), si = currentBalance, di = specific expense / incomeAccount
     mov ax, [si]
+	mov previousBalance, ax
+	cmp bx, 1
+    je UpdateIncome
     sub ax, [di]
-    mov [si], ax
     jmp EndOfUpdate
 
 UpdateIncome:
-    mov ax, [si]
     add ax, [di]
-    mov [si], ax
 
 EndOfUpdate:
+    mov [si], ax
     ret
 UpdateBalance endp
 

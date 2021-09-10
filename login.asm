@@ -6,8 +6,9 @@
     loginPassword db 30 dup ("$")
     failed db "                              !! Failed To Log In !!$"
     success db "                           -- Successfully Logged In! -- $"
-    exceeded db "  - You have exceeded the maximum amount of tries. -$"
+    exceeded db 10,13,"   - You have exceeded the maximum amount of tries. Please register again.-$"
     count db 0
+	isSuccess db 0
 
 .code
 login proc
@@ -33,9 +34,9 @@ Input:
 
     mov bx, 0
 CheckUsername:
-    mov al, [loginUsername+2+bx]
     cmp al, 0dh
     je Psw
+	mov al, [loginUsername+2+bx]
     cmp al, [username+2+bx]
     je PassUsername
     jmp Fail
@@ -46,6 +47,9 @@ PassUsername:
 
 Exceed:
     CHANGE_COLOR 04h, exceeded
+	PRESS_ANY_KEY
+	mov isSuccess, 0
+	ret
 
 Psw:
     NEW_LINE
@@ -65,6 +69,7 @@ CheckPsw:
     jmp CheckPsw
 
 LoginSuccess:
+	mov isSuccess, 1
     NEW_LINE
     NEW_LINE
 
@@ -83,7 +88,7 @@ Fail:
     CHANGE_COLOR 04h, failed
     inc count
     jmp LoginStart
-    ret
+    ;ret
 
 login endp
 
