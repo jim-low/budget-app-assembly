@@ -19,8 +19,8 @@ main proc
 Registration:
     call SignUp
     call Login
-	cmp isSuccess, 0
-	je Registration
+    cmp isSuccess, 0
+    je Registration
 
     CLEAR
     call PromptInitialBalance

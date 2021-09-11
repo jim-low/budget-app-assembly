@@ -35,7 +35,6 @@
     insuranceAmount dw 0
     incomeAmount dw 0
 
-    warning db "Dosbox Does Not Support 32 Bits And Above$"
     five dw 5
     ten dw 10
     ten2 db 10
@@ -47,28 +46,12 @@
     sumOfAllExpenses dw 0
     initialBalance dw 0
     currentBalance dw 0
-	previousBalance dw 0
+    previousBalance dw 0
     overallBudgetUsage dw ?
 
     operand db -1, 0, 1, 2, 3
 
 .code
-SumExpensesArray proc
-    mov cx, 5
-    mov ax, 0
-    lea si, expensesArray
-
-SumUp:
-    mov ax, [si]
-    add sumOfAllExpenses, ax
-    add si, 2
-    loop SumUp
-    ret
-SumExpensesArray endp
-
-warningMsg:
-    CHANGE_COLOR 04h, warning
-
 PromptConvertInsert proc
     ;di = buffer, si = prompt, bx = specific expense amount, cx = 1(has SST) or 0(no SST)
     mov singleInput, 0
@@ -93,8 +76,8 @@ Continue:
     dec bl
 
     add dl, operand[bx]
-
     mov bx, dx
+
     call InsertIntoExpensesArray
     ret
 
@@ -122,8 +105,8 @@ CompareAmountAndCalculatePercentage endp
 UpdateBalance proc
     ;bx = 0(income)/1(expenses), si = currentBalance, di = specific expense / incomeAccount
     mov ax, [si]
-	mov previousBalance, ax
-	cmp bx, 1
+    mov previousBalance, ax
+    cmp bx, 1
     je UpdateIncome
     sub ax, [di]
     jmp EndOfUpdate
@@ -155,7 +138,7 @@ EndOfCalculation:
     add ax, roundupSST
     mov groceriesAmount, ax
     ret
-CalculateGroceriesSST endp
+    CalculateGroceriesSST endp
 
 InsertIntoExpensesArray proc ; ax = actual amount, bx = array offset
     add expensesArray[bx], ax
