@@ -110,9 +110,6 @@ InputPassword:
     mov si, 0
 ;-----------password validation
 ChkStrLength:
-    mov ah,02h
-    mov dl,password[si]
-    int 21h
     cmp si,10
     jge CheckNumAndLetters
 
