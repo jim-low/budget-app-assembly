@@ -97,7 +97,7 @@ signUpExceed:
     mov passwordHasNumber,0
     mov passwordHasUpperCase,0
     mov passwordHasLowerCase,0
-    ret
+    jmp StartSignUp
 
 ;------------------user name---------------------------------------------------------------------------
 ;------------------password----------------------------------------------------------------------------
@@ -110,9 +110,11 @@ InputPassword:
     mov si, 0
 ;-----------password validation
 ChkStrLength:
+    mov ah,02h
+    mov dl,password[si]
+    int 21h
     cmp si,10
-    je CheckNumAndLetters
-    jmp ChkNum
+    jge CheckNumAndLetters
 
 ChkNum:
     cmp password[si],48
@@ -149,16 +151,15 @@ UpLetters:
 
 CheckNumAndLetters:
     cmp passwordHasNumber, 0
-    jne FinalMsg
+    je ErrorPs
 
     cmp passwordHasLowerCase, 0
-    jne FinalMsg
+    je ErrorPs
 
     cmp passwordHasUpperCase, 0
-    jne FinalMsg
+    je ErrorPs
 
-    jmp InputPassword
-
+    jmp FinalMsg
 NextPs:
     inc si
     jmp ChkStrLength
@@ -199,6 +200,9 @@ FinalMsg:
     NEW_LINE
 
     mov count, 0
+    mov passwordHasNumber,0
+    mov passwordHasLowerCase,0
+    mov passwordHasUpperCase,0
 
     PRESS_ANY_KEY
 
