@@ -48,10 +48,35 @@
     currentBalance dw 0
     previousBalance dw 0
     overallBudgetUsage dw ?
-
+	isValid db 0
+	invalidCount db -1
+	invalidMsg db 13, 10, "Invalid input! You should enter digit only. Please try again.$"
     operand db -1, 0, 1, 2, 3
 
 .code
+
+ValidateUserInput proc
+Check:
+    mov dl, [si]
+    cmp dl, "0"
+    jl Invalid
+    cmp dl, "9"
+    jg Invalid
+	inc si
+    loop Check
+    mov isValid, 1
+    jmp EndOfValidation
+
+Invalid:
+    mov isValid, 0
+    mov ah, 09h
+    lea dx, invalidMsg
+    int 21h
+
+EndOfValidation:
+    ret
+ValidateUserInput endp
+
 PromptConvertInsert proc
     ;di = buffer, si = prompt, bx = specific expense amount, cx = 1(has SST) or 0(no SST)
     mov singleInput, 0

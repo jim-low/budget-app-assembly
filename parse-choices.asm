@@ -52,11 +52,19 @@ ParseRecordTransaction proc
 
 SelectIncomeTransaction:
     NEW_LINE
+PromptUserForIncome:
     NEW_LINE
+	;inc invalidCount
     lea si, promptIncome
     lea di, incomeBuffer
     mov singleInput, 0
     call Prompt
+
+    lea si, incomeBuffer
+    mov cx, incomeBuffer[1]
+    call ValidateUserInput
+    cmp isValid, 0
+    je PromptUserForIncome
 
     lea si, incomeBuffer + 2
     lea di, incomeAmount
