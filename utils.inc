@@ -56,7 +56,7 @@ CHANGE_COLOR macro colorCode, msg
 endm
 
 .code
-Prompt proc ; di = dest, si = msg, singleInput = count
+Prompt proc ; di = dest, si = msg, singleInput = single input boolean
     lea dx, [si]
     mov ah, 09h
     int 21h

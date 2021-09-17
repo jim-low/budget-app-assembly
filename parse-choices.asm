@@ -50,21 +50,18 @@ ParseMainMenu endp
 ParseRecordTransaction proc
     jmp StartParseRecordTransaction
 
+RecordTransactionOutOfRange:
+    jmp RecordTransaction
+
 SelectIncomeTransaction:
     NEW_LINE
+
 PromptUserForIncome:
     NEW_LINE
-	;inc invalidCount
     lea si, promptIncome
     lea di, incomeBuffer
     mov singleInput, 0
     call Prompt
-
-    lea si, incomeBuffer
-    mov cx, incomeBuffer[1]
-    call ValidateUserInput
-    cmp isValid, 0
-    je PromptUserForIncome
 
     lea si, incomeBuffer + 2
     lea di, incomeAmount
@@ -82,12 +79,6 @@ PromptUserForIncome:
     PRESS_ANY_KEY
     jmp RecordTransaction
 
-SelectExpensesTransaction:
-    call ExpensesTransaction
-
-RecordTransactionOutOfRange:
-    jmp RecordTransaction
-
 StartParseRecordTransaction:
     cmp choice, "0"
     jle RecordTransactionOutOfRange
@@ -102,6 +93,9 @@ StartParseRecordTransaction:
     cmp choice, "2"
     je SelectExpensesTransaction
     ret
+
+SelectExpensesTransaction:
+    call ExpensesTransaction
 
 ParseRecordTransaction endp
 
